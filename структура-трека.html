@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Трек «Вайбкодинг» — структура</title>
+  <style>
+    :root {
+      --bg: #f4f5f7;
+      --surface: #ffffff;
+      --text: #1c1f24;
+      --muted: #5a6270;
+      --faint: #8b93a1;
+      --line: #e2e5eb;
+      --accent: #7700ff;
+      --accent-soft: #f3e8ff;
+      --ok: #0f7b4a;
+      --ok-soft: #e8f7ef;
+      --warn: #9a6700;
+      --warn-soft: #fff8e6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Rostelecom Basis", "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 32px 20px 64px;
+    }
+
+    .hero {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 28px 28px 24px;
+      margin-bottom: 20px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--muted);
+    }
+
+    .badge.accent {
+      background: var(--accent-soft);
+      border-color: #e0c4ff;
+      color: var(--accent);
+    }
+
+    h1 {
+      font-size: 30px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      font-weight: 700;
+    }
+
+    section.block {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 24px 26px;
+      margin-bottom: 16px;
+    }
+
+    section.block > h2 {
+      font-size: 20px;
+      letter-spacing: -0.01em;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h3 {
+      font-size: 16px;
+      margin: 18px 0 8px;
+    }
+
+    p { margin: 8px 0; }
+    p.note { color: var(--muted); }
+
+    strong { font-weight: 650; }
+
+    ul, ol { padding-left: 1.25rem; margin: 8px 0; }
+    li { margin: 4px 0; }
+
+    code {
+      font-family: ui-monospace, "Cascadia Code", "SF Mono", Menlo, monospace;
+      font-size: 0.9em;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 1px 5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+    }
+
+    th {
+      background: var(--bg);
+      color: var(--muted);
+      font-weight: 650;
+      font-size: 13px;
+    }
+
+    tr:nth-child(even) td { background: #fafbfc; }
+
+    .kv {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+
+    .kv th {
+      width: 28%;
+      background: var(--bg);
+      color: var(--text);
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .callout {
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin: 12px 0;
+      border: 1px solid var(--line);
+      background: var(--bg);
+    }
+
+    .callout.goal {
+      background: var(--accent-soft);
+      border-color: #e0c4ff;
+    }
+
+    .callout.warn {
+      background: var(--warn-soft);
+      border-color: #f0e0a8;
+    }
+
+    .callout .title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .callout.goal .title { color: var(--accent); }
+    .callout.warn .title { color: var(--warn); }
+
+    .path-map {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .path-phase {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 16px;
+      background: var(--surface);
+    }
+
+    .path-phase h3 {
+      margin: 0 0 12px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .path-phase ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      counter-reset: phase-step;
+    }
+
+    .path-phase li {
+      counter-increment: phase-step;
+      margin: 0;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .path-phase li:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .path-phase li:first-child {
+      padding-top: 0;
+    }
+
+    .path-phase .step-title {
+      font-weight: 650;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .path-phase .step-title::before {
+      content: counter(phase-step) ". ";
+      color: var(--faint);
+      font-weight: 600;
+    }
+
+    .path-phase .step-desc {
+      margin-top: 3px;
+      font-size: 13px;
+      color: var(--muted);
+      padding-left: 1.1em;
+    }
+
+    .path-arrow-row {
+      display: none;
+    }
+
+    @media (max-width: 720px) {
+      .path-map {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .workshop {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin: 14px 0;
+      background: #fafbfc;
+    }
+
+    .workshop h3 {
+      margin-top: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: baseline;
+    }
+
+    .workshop-sub {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .num-list {
+      counter-reset: item;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .num-list li {
+      counter-increment: item;
+      position: relative;
+      padding-left: 2rem;
+      margin: 8px 0;
+    }
+
+    .num-list li::before {
+      content: counter(item);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1.4rem;
+      height: 1.4rem;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    footer.doc-foot {
+      margin-top: 8px;
+      color: var(--faint);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      h1 { font-size: 24px; }
+      .kv th { width: auto; display: block; border-bottom: none; }
+      .kv td { display: block; }
+      .kv tr {
+        display: block;
+        margin-bottom: 8px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .kv th, .kv td { border: none; }
+      table.stack-mobile thead { display: none; }
+      table.stack-mobile tr {
+        display: block;
+        margin-bottom: 10px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      table.stack-mobile td {
+        display: block;
+        border: none;
+        border-top: 1px solid var(--line);
+      }
+      table.stack-mobile td:first-child {
+        border-top: none;
+        font-weight: 650;
+        background: var(--bg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>Трек «Вайбкодинг» — структура</h1>
+    </header>
+
+    <section class="block" id="idea">
+      <h2>1. Сквозная идея трека</h2>
+
+      <table class="stack-mobile">
+        <thead>
+          <tr>
+            <th>Тезис из идей</th>
+            <th>Как звучит в программе</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Инструмент <strong>ломает прежнюю логику</strong> работы с ИИ</td>
+            <td>Не «спросил чат — получил ответ», а <strong>среда</strong>, где ИИ работает внутри проекта</td>
+          </tr>
+          <tr>
+            <td>Мы <strong>задаём рамки</strong> и ведём сотрудника в них</td>
+            <td>Участник учится <strong>ограничивать и направлять</strong> агента, а не «угадывать промпт»</td>
+          </tr>
+          <tr>
+            <td><code>agents.md</code> — <strong>должностная инструкция</strong> для ИИ-агента</td>
+            <td>Центральный артефакт трека: правила роли, границ, стиля, контекста</td>
+          </tr>
+          <tr>
+            <td>Переосмысление роли ИИ: мы <strong>управляем вниманием</strong></td>
+            <td>Фокус трека: <em>что агент видит, что игнорирует, что накапливает</em></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout goal">
+        <div class="title">Цель трека</div>
+        Участник умеет организовать рабочее пространство так, чтобы ИИ-агент стабильно помогал
+        <strong>в его функции</strong>, а не «отвечал в вакууме».
+      </div>
+
+      <div class="callout warn">
+        <div class="title">Не цель</div>
+        Сделать из всех разработчиков; глубокий разбор моделей; замена корпоративных политик ИБ.
+      </div>
+
+      <p><strong>Рабочий стек (из идей):</strong> VS Code + Василиса (уточнить финально).</p>
+    </section>
+
+    <section class="block" id="path">
+      <h2>2. Логика пути участника</h2>
+
+      <div class="path-map" aria-label="Путь участника">
+        <div class="path-phase">
+          <h3>Вход</h3>
+          <ol>
+            <li>
+              <div class="step-title">Мотивационная анкета</div>
+              <div class="step-desc">Порог входа на трек</div>
+            </li>
+            <li>
+              <div class="step-title">Инструкция по установке ПО</div>
+              <div class="step-desc">После прохождения отбора</div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="path-phase">
+          <h3>Старт</h3>
+          <ol>
+            <li>
+              <div class="step-title">Вводная встреча</div>
+              <div class="step-desc">Своя функция + готовность инструмента</div>
+            </li>
+            <li>
+              <div class="step-title">Преридеры</div>
+              <div class="step-desc">После вводной встречи</div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="path-phase">
+          <h3>Практика</h3>
+          <ol>
+            <li>
+              <div class="step-title">Практикум 1</div>
+              <div class="step-desc">Философия и «зачем мне это»</div>
+            </li>
+            <li>
+              <div class="step-title">Практикум 2</div>
+              <div class="step-desc">Архитектура контекста + agents.md</div>
+            </li>
+            <li>
+              <div class="step-title">Практикум 3</div>
+              <div class="step-desc">Создание решений руками</div>
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <p class="note">
+        <strong>Принцип распределения нагрузки:</strong> часть теории и онбординга — во
+        вводную встречу и преридеры; практикумы — на практику и артефакты.
+      </p>
+    </section>
+
+    <section class="block" id="before">
+      <h2>3. Блок «До трека» (вход и преридеры)</h2>
+
+      <h3>3.1. Мотивационная анкета — порог входа</h3>
+      <p>
+        <strong>Зачем:</strong> отсеять случайных слушателей, понять функции и готовность,
+        собрать материал для персонализации Практикума 1.
+      </p>
+      <p><strong>Черновик блоков анкеты:</strong></p>
+      <ol>
+        <li>Мотивация: зачем идёт на трек, какую задачу хочет решить.</li>
+        <li>Функция / роль: чем занимается день за днём.</li>
+        <li>Опыт с ИИ: чат / код / документы / «почти не пользовался».</li>
+        <li>Техготовность: Linux, возможность установить VS Code + Василису.</li>
+        <li>Ожидания: что считает успехом через 2–3 недели после трека.</li>
+      </ol>
+
+      <h3>3.2. Установка инструмента — после отбора</h3>
+      <p>
+        После прохождения отбора на трек участник получает <strong>полную инструкцию</strong>
+        по установке и чек-лист «готово / не готово».<br>
+        Синхронное время <strong>не тратить</strong> на установку с нуля
+        (только troubleshooting на вводной встрече).
+      </p>
+
+      <h3>3.3. Преридеры (асинхронно)</h3>
+      <p>Вынести из живых встреч (после вводной встречи):</p>
+      <ul>
+        <li>коротко: чем агент в IDE отличается от чата;</li>
+        <li>зачем нужны рамки и файлы инструкций;</li>
+        <li>глоссарий: проект, контекст, агент, <code>AGENTS.md</code> / <code>agents.md</code>.</li>
+      </ul>
+    </section>
+
+    <section class="block" id="intro">
+      <h2>4. Вводная встреча</h2>
+      <table class="kv">
+        <tbody>
+          <tr>
+            <th>Зачем</th>
+            <td>Подготовить почву под персонализацию и снять технический барьер</td>
+          </tr>
+          <tr>
+            <th>Содержание</th>
+            <td>
+              1) Проверить установку ПО / помочь с troubleshooting.
+              2) Прописать <strong>свою функцию</strong> (роль, типовые задачи, артефакты, ограничения)
+            </td>
+          </tr>
+          <tr>
+            <th>Результат</th>
+            <td>Короткий профиль «я как сотрудник» + подтверждение, что среда запускается</td>
+          </tr>
+          <tr>
+            <th>Связь с треком</th>
+            <td>
+              Входной материал для Практикума 1 (документ под профиль) и Практикума 2
+              (<code>agents.md</code> под реальную роль)
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="block" id="workshops">
+      <h2>5. Каркас практикумов</h2>
+
+      <article class="workshop">
+        <h3>
+          Практикум 1
+          <span class="workshop-sub">Философия использования и «зачем мне это»</span>
+        </h3>
+        <table class="kv">
+          <tbody>
+            <tr>
+              <th>Фокус</th>
+              <td>Смена модели мышления: от чата к управлению вниманием агента</td>
+            </tr>
+            <tr>
+              <th>Практика</th>
+              <td>
+                Участник <strong>сам</strong> создаёт документ: что такое вайбкодинг-среда
+                и <strong>как она помогает исходя из его профиля</strong>
+              </td>
+            </tr>
+            <tr>
+              <th>Формат артефакта</th>
+              <td>HTML, стилистика шаблона РТК</td>
+            </tr>
+            <tr>
+              <th>Образовательный результат</th>
+              <td>
+                Объясняет своими словами ценность инструмента <strong>для своей функции</strong>;
+                формулирует философию использования на 5–7 тезисов
+              </td>
+            </tr>
+            <tr>
+              <th>Итог</th>
+              <td>Концептуализация + начало эксперимента (документ о себе)</td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="workshop">
+        <h3>
+          Практикум 2
+          <span class="workshop-sub">Архитектура папки и agents.md</span>
+        </h3>
+        <table class="kv">
+          <tbody>
+            <tr>
+              <th>Фокус</th>
+              <td>
+                Организация <strong>контекста проекта</strong>: что хранится, что накапливается,
+                какие правила обязан учесть ассистент
+              </td>
+            </tr>
+            <tr>
+              <th>Практика</th>
+              <td>
+                Спроектировать структуру папки под свою/учебную задачу; написать
+                <code>agents.md</code> как должностную инструкцию агента
+              </td>
+            </tr>
+            <tr>
+              <th>Ключевые вопросы</th>
+              <td>
+                Что агент должен видеть всегда? Что не должен трогать?
+                Что растёт со временем (логи, черновики, правила)?
+              </td>
+            </tr>
+            <tr>
+              <th>Образовательный результат</th>
+              <td>Есть рабочая схема папки + первый осмысленный <code>agents.md</code></td>
+            </tr>
+            <tr>
+              <th>Итог</th>
+              <td>Конкретный опыт + экспериментирование</td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="workshop">
+        <h3>
+          Практикум 3
+          <span class="workshop-sub">Создание решений руками</span>
+        </h3>
+        <table class="kv">
+          <tbody>
+            <tr>
+              <th>Фокус</th>
+              <td>Применение среды: файлы, итерации, мини-продукты</td>
+            </tr>
+            <tr>
+              <th>Практика (из идей)</th>
+              <td>
+                Старт со «Змейки» → другие игры / мини-решения → работа с файлами →
+                парсинг сайта (по уровню группы)
+              </td>
+            </tr>
+            <tr>
+              <th>Смысл блока</th>
+              <td>
+                Не «научиться писать змейку», а <strong>прожить цикл</strong>:
+                задача → контекст → агент → правки → результат в файлах
+              </td>
+            </tr>
+            <tr>
+              <th>Образовательный результат</th>
+              <td>
+                Минимум один завершённый артефакт + понимание, как повторить цикл на рабочей задаче
+              </td>
+            </tr>
+            <tr>
+              <th>Итог</th>
+              <td>Конкретный опыт + рефлексия переноса</td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+    </section>
+
+    <section class="block" id="artifacts">
+      <h2>6. Сквозные артефакты участника</h2>
+      <p>К концу трека у человека в папке должно лежать:</p>
+      <ol class="num-list">
+        <li><strong>Профиль функции</strong> (вводная встреча).</li>
+        <li><strong>HTML-документ</strong> «инструмент × моя роль» (Практикум 1).</li>
+        <li><strong>Архитектура папки</strong> + <code>agents.md</code> (Практикум 2).</li>
+        <li><strong>Мини-решение</strong> (игра / парсер / рабочий прототип) (Практикум 3).</li>
+        <li><em>(Рекомендуется)</em> <strong>План переноса:</strong> одна рабочая задача на ближайшую неделю.</li>
+      </ol>
+    </section>
+
+    <section class="block" id="outcomes">
+      <h2>7. Черновик образовательных результатов всего трека</h2>
+      <p>К концу трека участник сможет:</p>
+      <ol class="num-list">
+        <li><strong>Объяснить</strong>, чем работа с ИИ-агентом в IDE отличается от чата и почему важны рамки внимания.</li>
+        <li><strong>Описать</strong> ценность подхода применительно к <strong>своей</strong> функции.</li>
+        <li><strong>Спроектировать</strong> структуру папки проекта под накопление контекста.</li>
+        <li><strong>Написать</strong> <code>agents.md</code> как должностную инструкцию агента.</li>
+        <li><strong>Пройти цикл</strong> постановки задачи → работа агента с файлами → итерация → готовый мини-результат.</li>
+        <li><strong>Сформулировать</strong> одну задачу для переноса в свою работу.</li>
+      </ol>
+    </section>
+
+    <section class="block" id="next">
+      <h2>8. Следующие шаги по сборке трека</h2>
+      <ol class="num-list">
+        <li>Сходить к коллегам из <strong>ШП</strong>, зафиксировать опыт (что сработало / что ломалось).</li>
+        <li>Утвердить инструмент: <strong>VS Code + Василиса</strong> (и терминологию в материалах).</li>
+        <li>Написать <strong>инструкцию установки</strong> + чек-лист к вводной встрече.</li>
+        <li>Собрать <strong>мотивационную анкету</strong> и критерии допуска.</li>
+        <li>Набросать <strong>преридеры</strong> (коротко, 15–30 мин чтения).</li>
+        <li>Детализировать планы Практикумов 1–3 по шаблону образовательного события (тайминг, роли, инструменты: Толк / Гранатум / LMS).</li>
+        <li>Подготовить шаблон HTML РТК и эталонный <code>agents.md</code> для демо.</li>
+      </ol>
+    </section>
+
+    <footer class="doc-foot">
+      Трек «Вайбкодинг» · структура программы
+    </footer>
+  </div>
+</body>
+</html>
