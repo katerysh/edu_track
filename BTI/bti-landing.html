@@ -1,0 +1,2058 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система развития руководителей БТИ</title>
+    <style>
+        @font-face {
+            font-family: 'RostelecomBasis';
+            src: url('Фирменный шрифт/RostelecomBasis-Light.otf') format('opentype');
+            font-weight: 300;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'RostelecomBasis';
+            src: url('Фирменный шрифт/RostelecomBasis-Regular.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'RostelecomBasis';
+            src: url('Фирменный шрифт/RostelecomBasis-Medium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'RostelecomBasis';
+            src: url('Фирменный шрифт/RostelecomBasis-Bold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+    </style>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #7700FF;
+            --primary-light: #9933FF;
+            --accent: #FF4F12;
+            --accent-light: #FF7A4A;
+            --dark-blue: #273A64;
+            --bg: #F8F9FA;
+            --white: #ffffff;
+            --text: #1A1A2E;
+            --text-light: #6B7280;
+            --border: #E5E7EB;
+            --level1: #7700FF;
+            --level2: #FF4F12;
+            --level3: #273A64;
+        }
+        body {
+            font-family: 'RostelecomBasis', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text);
+            line-height: 1.7;
+            background: var(--bg);
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #7700FF 0%, #273A64 100%);
+            color: #ffffff;
+            padding: 60px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .header-content { position: relative; z-index: 1; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        h1 { font-size: 48px; font-weight: 700; margin-bottom: 16px; letter-spacing: -0.5px; }
+        .header-subtitle { font-size: 20px; opacity: 0.9; max-width: 600px; margin-bottom: 32px; }
+        .header-stats { display: flex; gap: 40px; margin-top: 40px; }
+        .stat-item { text-align: left; }
+        .stat-number { font-size: 32px; font-weight: 700; }
+        .stat-label { font-size: 14px; opacity: 0.8; }
+
+        /* Navigation */
+        nav {
+            background: rgba(255,255,255,0.95);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+        }
+        nav .container { display: flex; gap: 32px; padding: 0 24px; }
+        nav a {
+            padding: 16px 0;
+            text-decoration: none;
+            color: #4B5563;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+        /* Sections */
+        section { padding: 80px 0; }
+        .section-title { font-size: 32px; font-weight: 700; margin-bottom: 12px; color: #273A64; }
+        .section-title--small { font-size: 22px; margin-top: 40px; margin-bottom: 18px; }
+        .section-subtitle { font-size: 17px; color: var(--text-light); max-width: 600px; margin-bottom: 48px; }
+
+        /* Concept */
+        #concept { background: #ffffff; }
+        .concept-description {
+            display: flex;
+            gap: 20px;
+            margin: 0 0 40px;
+        }
+        .concept-card {
+            flex: 1;
+            background: var(--white);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .concept-card:hover {
+            border-color: #7700FF;
+            box-shadow: 0 8px 24px rgba(119,0,255,0.18);
+        }
+        .concept-card p {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #374151;
+            margin: 0;
+        }
+        .concept-flow {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 0;
+            padding: 20px 0;
+        }
+        .flow-step {
+            flex: 1;
+            min-width: 180px;
+            max-width: 200px;
+            text-align: center;
+            padding: 16px 12px;
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+        .flow-step:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transform: translateY(-4px);
+        }
+        .flow-num {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: #FF4F12;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            margin: 0 auto 12px;
+        }
+        .flow-content h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: #273A64; }
+        .flow-content p { font-size: 13px; color: var(--text-light); line-height: 1.5; }
+        .flow-connector {
+            width: 30px;
+            height: 2px;
+            background: var(--border);
+            align-self: center;
+            margin-top: 36px;
+            flex-shrink: 0;
+        }
+
+        /* Levels */
+        #levels { background: #F8F9FA; }
+        .levels-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .level-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 32px;
+            border-top: 4px solid;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .level-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+        .level-card.l1 { border-color: var(--level1); }
+        .level-card.l2 { border-color: var(--level2); }
+        .level-card.l3 { border-color: var(--level3); }
+        .level-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        .level-card.l1 .level-badge { background: #EDE0FF; color: #7700FF; }
+        .level-card.l2 .level-badge { background: #FFE0D0; color: #FF4F12; }
+        .level-card.l3 .level-badge { background: #D0D8E8; color: #273A64; }
+        .level-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: #273A64; }
+        .level-positions { font-size: 14px; color: var(--text-light); margin-bottom: 20px; }
+        .level-skills { list-style: none; }
+        .level-skills li {
+            padding: 8px 0;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .level-skills li:last-child { border-bottom: none; }
+        .level-skills li::before { content: '◆'; font-size: 10px; color: #FF4F12; flex-shrink: 0; }
+
+        /* Program */
+        #program { background: var(--white); }
+        .program-timeline { position: relative; }
+        .program-timeline::before {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 64px;
+            margin-bottom: 40px;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: 16px;
+            top: 4px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            background: var(--white);
+        }
+        .timeline-period {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+        .timeline-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+        .timeline-desc { font-size: 14px; color: var(--text-light); }
+        .timeline-tags { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+        .tag {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .tag-online { background: #e6fffa; color: #234e52; }
+        .tag-offline { background: #fef5e7; color: #744210; }
+        .tag-mixed { background: #e9d8fd; color: #553c9a; }
+
+        /* Program by level */
+        .program-levels { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+        .program-note {
+            border: 1px solid #FF4F12;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 28px;
+            color: #374151;
+            font-size: 17px;
+            line-height: 1.5;
+            background: #FFF7F4;
+        }
+        .program-level-btn {
+            flex: 1 1 0;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 6px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 22px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 400;
+            color: #273A64;
+            transition: all 0.3s;
+        }
+        .program-level-btn span {
+            font-size: 16px;
+            font-weight: 400;
+            color: inherit;
+            margin: 0;
+        }
+        .program-level-btn.active {
+            background: #7700FF;
+            border-color: #7700FF;
+            box-shadow: 0 6px 18px rgba(119,0,255,0.15);
+            color: #ffffff;
+        }
+        .program-level-btn.active span { color: #ffffff; }
+        .program-panel { display: none; }
+        .program-panel.active { display: block; }
+        .program-level-head { margin-bottom: 20px; }
+        .program-level-head h3 { font-size: 22px; font-weight: 700; color: #273A64; margin-bottom: 8px; }
+        .program-level-head p { font-size: 15px; color: var(--text-light); line-height: 1.5; max-width: 760px; }
+        .program-list { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        .program-item {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: grid-template-columns 0.35s ease, max-width 0.35s ease, border-color 0.3s, box-shadow 0.3s;
+            display: grid;
+            grid-template-columns: 1fr 0fr;
+            align-items: start;
+            justify-self: start;
+            width: 100%;
+            max-width: 66.666%;
+        }
+        .program-item:hover { border-color: #7700FF; box-shadow: 0 6px 18px rgba(119,0,255,0.12); }
+        .program-item.open {
+            border-color: #7700FF;
+            box-shadow: 0 6px 18px rgba(119,0,255,0.12);
+            grid-template-columns: 1fr 1fr;
+            max-width: 100%;
+        }
+        .program-item-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 18px 20px;
+            cursor: pointer;
+        }
+        .program-item-head h4 { font-size: 16px; font-weight: 700; color: #273A64; margin-bottom: 4px; }
+        .program-hash {
+            display: block;
+            width: fit-content;
+            font-size: 12px;
+            font-weight: 600;
+            color: #7700FF;
+            background: #f1e9ff;
+            padding: 2px 8px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+        .program-item-head p { font-size: 14px; color: var(--text-light); line-height: 1.45; }
+        .program-item-arrow {
+            font-size: 12px;
+            color: var(--text-light);
+            transition: transform 0.3s;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+        .program-item.open .program-item-arrow { transform: rotate(180deg); }
+        .program-item-body {
+            overflow: hidden;
+            min-width: 0;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.35s ease, opacity 0.35s ease;
+            padding: 0 20px;
+        }
+        .program-item.open .program-item-body {
+            opacity: 1;
+            max-height: 600px;
+            padding: 18px 20px;
+            border-left: 1px solid var(--border);
+        }
+        .program-detail-section h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+        .program-detail-section + .program-detail-section { margin-top: 20px; }
+        .program-detail-placeholder {
+            font-size: 13px;
+            color: var(--text-light);
+            padding: 8px 12px;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+        .program-detail-list { list-style: none; display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; }
+        .program-detail-list .program-detail-sublist { list-style: none; margin: 8px 0 2px; padding: 0 0 0 18px; display: flex; flex-direction: column; gap: 4px; }
+        .program-detail-list .program-detail-sublist li { font-size: 13px; color: #4B5563; position: relative; padding: 3px 0 3px 16px; line-height: 1.4; }
+        .program-detail-list .program-detail-sublist li::before { content: ''; position: absolute; left: 2px; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: #9CA3AF; }
+        .program-detail-list li i { color: #9CA3AF; font-style: italic; }
+        .program-detail-section > i { color: #9CA3AF; font-style: italic; font-size: 13px; }
+        .program-detail-list li .course-star { color: var(--primary); font-weight: 600; }
+        .program-detail-list li .course-footnote { font-size: 12px; color: #FF4F12; margin-top: 5px; line-height: 1.4; }
+        .program-detail-list li .course-footnote-italic { font-size: 12px; color: #FF4F12; margin-top: 5px; line-height: 1.4; font-style: italic; }
+        .program-detail-list li {
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.4;
+            padding-left: 16px;
+            position: relative;
+        }
+        .program-detail-list li::before {
+            content: '';
+            position: absolute;
+            left: 2px;
+            top: 8px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+        .program-tag {
+            font-size: 12px;
+            font-weight: 600;
+            color: #7700FF;
+            background: #f1e9ff;
+            padding: 3px 10px;
+            border-radius: 12px;
+            white-space: nowrap;
+        }
+        .program-item p { font-size: 14px; color: var(--text-light); line-height: 1.45; }
+
+        /* Formats */
+        #formats { background: var(--white); }
+        .formats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .format-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .format-card:hover { border-color: var(--accent); box-shadow: 0 8px 24px rgba(255,79,18,0.12); transform: translateY(-4px); }
+        .format-icon { font-size: 28px; margin-bottom: 12px; color: #7700FF; }
+        .format-name { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+        .format-desc { font-size: 13px; color: var(--text-light); line-height: 1.5; }
+        .format-levels { display: flex; gap: 4px; margin-top: 12px; }
+        .format-level-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+        }
+        .format-level-dot.active { background: var(--primary); }
+
+        /* Skills Matrix */
+        #skills { background: var(--white); }
+        .skills-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .skills-table th {
+            background: var(--primary);
+            color: var(--white);
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .skills-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        .skills-table tr:hover td { background: #f0fff4; }
+        .skill-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            margin: 2px;
+        }
+        .skill-tag.basic { background: #c6f6d5; color: #276749; }
+        .skill-tag.advanced { background: #bee3f8; color: #2a4365; }
+        .skill-tag.expert { background: #e9d8fd; color: #553c9a; }
+        .skill-tag.strategic { background: #fed7d7; color: #742a2a; }
+
+        /* CTA */
+        #cta { background: linear-gradient(135deg, #7700FF 0%, #9933FF 100%); color: #ffffff; text-align: center; }
+        #cta .section-title { color: var(--white); }
+        #cta .section-subtitle { color: rgba(255,255,255,0.8); margin-left: auto; margin-right: auto; }
+        .cta-buttons { display: flex; gap: 16px; justify-content: center; margin-top: 32px; }
+        .btn {
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-primary { background: var(--primary); color: var(--white); box-shadow: 0 4px 16px rgba(119,0,255,0.3); }
+        .btn-primary:hover { background: var(--accent); box-shadow: 0 4px 16px rgba(255,79,18,0.3); }
+        .btn-secondary { background: rgba(255,255,255,0.15); color: var(--white); border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(4px); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.25); }
+
+        /* Footer */
+        footer { background: linear-gradient(135deg, #273A64 0%, #7700FF 100%); color: rgba(255,255,255,0.8); padding: 32px 0; font-size: 13px; }
+        footer .container { display: flex; justify-content: space-between; align-items: center; }
+
+        /* Accordion */
+        .levels-accordion { display: flex; flex-direction: column; gap: 12px; }
+        .accordion-item {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+        .accordion-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .accordion-item.active { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+        .accordion-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .accordion-header:hover { background: #F8F9FA; }
+        .accordion-header-left { display: flex; align-items: center; gap: 16px; }
+        .level-tag {
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .l1-tag { background: #EDE0FF; color: #7700FF; }
+        .l2-tag { background: #FFE0D0; color: #FF4F12; }
+        .l3-tag { background: #D0D8E8; color: #273A64; }
+        .accordion-title { font-size: 18px; font-weight: 600; color: #273A64; }
+        .accordion-arrow {
+            font-size: 12px;
+            color: var(--text-light);
+            transition: transform 0.3s;
+        }
+        .accordion-item.active .accordion-arrow { transform: rotate(180deg); }
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        .accordion-item.active .accordion-body {
+            max-height: 600px;
+            padding: 0 24px 24px;
+        }
+        .accordion-body-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            padding-top: 16px;
+            border-top: 1px solid #E5E7EB;
+        }
+        .accordion-positions h4,
+        .accordion-skills h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        .accordion-positions ul,
+        .accordion-skills ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .accordion-positions li,
+        .accordion-skills li {
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+        .accordion-item[data-level="1"] .accordion-skills li { background: #EDE0FF; cursor: pointer; transition: all 0.2s; color: #374151; }
+        .accordion-item[data-level="1"] .accordion-skills li:hover { background: #D0C0FF; transform: translateX(4px); }
+        .accordion-item[data-level="2"] .accordion-skills li { background: #FFE0D0; cursor: pointer; transition: all 0.2s; color: #374151; }
+        .accordion-item[data-level="2"] .accordion-skills li:hover { background: #FFC0A0; transform: translateX(4px); }
+        .accordion-item[data-level="3"] .accordion-skills li { background: #D0D8E8; cursor: pointer; transition: all 0.2s; color: #374151; }
+        .accordion-item[data-level="3"] .accordion-skills li:hover { background: #A0B8D8; transform: translateX(4px); }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; backdrop-filter: blur(4px); }
+        .modal-container {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+        .modal-overlay.active .modal-container { transform: translateY(0); }
+        .modal-close {
+            position: absolute;
+            top: 16px; right: 16px;
+            width: 32px; height: 32px;
+            border: none;
+            background: var(--border);
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .modal-close:hover { background: #cbd5e0; }
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 24px;
+            padding-right: 40px;
+        }
+        .modal-content { display: flex; flex-direction: column; gap: 24px; }
+        .modal-block h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        .modal-block ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .modal-block ul li {
+            font-size: 14px;
+            padding: 10px 14px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+        }
+        .modal-block p {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        /* Why section */
+        .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .why-lead { font-size: 18px; color: var(--text-light); line-height: 1.5; margin-bottom: 24px; }
+        .why-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.3s;
+        }
+        .why-card:hover {
+            box-shadow: 0 8px 24px rgba(119,0,255,0.12);
+            transform: translateY(-4px);
+        }
+        .why-icon { font-size: 24px; color: #FF4F12; margin-bottom: 12px; }
+        .why-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; color: #273A64; }
+        .why-card p { font-size: 14px; color: var(--text-light); line-height: 1.6; }
+
+        /* Audience */
+        .audience-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .audience-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.3s;
+        }
+        .audience-card:hover {
+            box-shadow: 0 8px 24px rgba(119,0,255,0.12);
+            transform: translateY(-4px);
+        }
+        .audience-level { font-size: 12px; color: #7700FF; margin-bottom: 10px; letter-spacing: 2px; }
+        .audience-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: #273A64; }
+        .audience-card p { font-size: 13px; color: #374151; flex-grow: 1; line-height: 1.5; }
+        .audience-count {
+            margin-top: 12px;
+            padding: 4px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #6B7280;
+            background: #F3F4F6;
+            border-radius: 16px;
+            align-self: flex-start;
+        }
+        .audience-card--toggle { cursor: pointer; }
+        .audience-card__head { display: flex; align-items: center; justify-content: space-between; }
+        .audience-toggle-icon {
+            font-size: 15px;
+            color: #FF4F12;
+            transition: transform 0.3s;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+        .audience-card.is-open .audience-toggle-icon { transform: rotate(180deg); }
+        .audience-positions {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+        .audience-card.is-open .audience-positions { max-height: 600px; }
+        .audience-positions ul {
+            list-style: none;
+            margin: 0;
+            padding: 12px 0 0;
+        }
+        .audience-positions li {
+            font-size: 12px;
+            color: #374151;
+            padding: 8px 0 8px 18px;
+            border-top: 1px solid var(--border);
+            line-height: 1.4;
+            position: relative;
+        }
+        .audience-positions li::before {
+            content: '\25CF';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            font-size: 10px;
+            color: #FF4F12;
+        }
+        .audience-positions li:first-child { border-top: none; }
+        .audience-pos-group { margin-top: 10px; }
+        .audience-pos-group:first-child { margin-top: 14px; }
+        .audience-pos-group__title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #7700FF;
+            margin-bottom: 2px;
+        }
+
+        /* Structure horizontal */
+        .structure-horizontal {
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+            padding: 10px 0;
+        }
+        .structure-step {
+            flex: 1 1 0;
+            min-width: 0;
+            text-align: center;
+            padding: 16px 12px;
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #E5E7EB;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .structure-step::before {
+            content: '◉';
+            display: block;
+            font-size: 14px;
+            color: #7700FF;
+            margin: 0 0 12px 0;
+        }
+        .structure-step:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transform: translateY(-4px);
+        }
+        .structure-step.expanded {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+            background: #7700FF;
+            flex: 2 1 0;
+        }
+        .structure-step.expanded h4 { margin-bottom: 12px; color: #ffffff; }
+        .structure-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+        .structure-step.expanded .structure-details {
+            max-height: 200px;
+            opacity: 1;
+        }
+        .structure-details p {
+            font-size: 13px;
+            color: #ffffff;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+        }
+        .structure-details p:last-child { border-bottom: none; }
+
+
+        /* Mentoring */
+        .mentoring-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .mentoring-block {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 28px;
+            border: 1px solid #E5E7EB;
+        }
+        .mentoring-block h3 { font-size: 17px; font-weight: 600; margin-bottom: 16px; color: #273A64; }
+        .mentoring-block ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .mentoring-block li {
+            font-size: 14px;
+            padding: 10px 14px;
+            background: #F8F9FA;
+            border-radius: 8px;
+            border-left: 3px solid #7700FF;
+            color: #374151;
+        }
+
+        /* Results */
+        .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .results-block {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .results-block h3 { font-size: 17px; font-weight: 600; margin-bottom: 16px; color: var(--primary); }
+        .result-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+        .result-item:last-child { margin-bottom: 0; }
+        .result-icon {
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            background: #EDE0FF;
+            color: #7700FF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .result-text strong { font-size: 14px; display: block; margin-bottom: 2px; }
+        .result-text p { font-size: 13px; color: var(--text-light); }
+
+        /* Sponsor */
+        .sponsor-section { background: #ffffff; }
+        .sponsor-quote {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .sponsor-quote p {
+            font-size: 17px;
+            font-style: italic;
+            color: var(--text);
+            line-height: 1.7;
+            margin-bottom: 24px;
+            position: relative;
+        }
+        .sponsor-quote p::before {
+            content: '\201C';
+            font-size: 60px;
+            color: var(--accent);
+            opacity: 0.3;
+            position: absolute;
+            top: -20px; left: -30px;
+            font-family: Georgia, serif;
+        }
+        .sponsor-info { display: flex; flex-direction: column; gap: 4px; }
+        .sponsor-info strong { font-size: 15px; color: var(--primary); }
+        .sponsor-info span { font-size: 13px; color: var(--text-light); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 32px; }
+            .header-stats { flex-direction: column; gap: 16px; }
+            .concept-description { flex-direction: column; }
+            .concept-flow { flex-direction: column; align-items: center; }
+            .flow-step { max-width: 100%; min-width: auto; width: 100%; }
+            .flow-connector { width: 2px; height: 20px; margin: 0; }
+            .accordion-body-grid { grid-template-columns: 1fr; }
+            .formats-grid { grid-template-columns: 1fr; }
+            .program-list { grid-template-columns: 1fr; }
+            .program-item { max-width: 100%; }
+            .program-item.open { grid-template-columns: 1fr; }
+            .program-item.open .program-item-body { border-left: none; border-top: 1px solid var(--border); }
+            .why-grid { grid-template-columns: 1fr; }
+            .audience-grid { grid-template-columns: 1fr; }
+            .audience-level { font-size: 12px; }
+            .results-grid { grid-template-columns: 1fr; }
+            .structure-horizontal { flex-direction: column; }
+            .structure-step { max-width: 100%; min-width: 0; }
+            nav .container { overflow-x: auto; gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container header-content">
+
+        <h1>Система развития руководителей БТИ</h1>
+        <p class="header-subtitle">От операционного управления до стратегического лидерства</p>
+        <div class="header-stats">
+            <div class="stat-item">
+                <div class="stat-number">3</div>
+                <div class="stat-label">уровня</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">~900</div>
+                <div class="stat-label">участников</div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<nav>
+    <div class="container">
+        <a href="#concept">Концепция</a>
+        <a href="#audience">Участники</a>
+        <a href="#program">Программа</a>
+        <a href="#formats">Форматы</a>
+        <a href="#results">Результаты</a>
+    </div>
+</nav>
+
+<section id="concept">
+    <div class="container">
+        <h2 class="section-title">Концепция системы развития</h2>
+        <p class="section-subtitle">Единый ресурс развития для каждого руководителя БТИ &mdash; от диагностики навыков до карьерного перехода</p>
+        <div class="concept-description">
+            <div class="concept-card">
+                <p>Обновлённая система развития руководителей БТИ<br>создана с учётом актуальных управленческих вызовов и модели компетенций.</p>
+            </div>
+            <div class="concept-card">
+                <p>В рамках системы каждый руководитель проходит диагностику уровня управления, получает персональную траекторию развития и работает с реальными управленческими кейсами.</p>
+            </div>
+        </div>
+        <p class="why-lead">Система, которая решает ключевые задачи</p>
+        <div class="why-grid">
+            <div class="why-card">
+                <div class="why-icon">&#9679;</div>
+                <h3>Системность управления</h3>
+                <p>Каждый руководитель понимает, что ему нужно развивать для перехода на следующий уровень.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">&#9679;</div>
+                <h3>Культура управления</h3>
+                <p>Обучение создаёт среду, где руководители практикуют инструменты и переносят их в рабочую деятельность.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">&#9679;</div>
+                <h3>Кадровый потенциал</h3>
+                <p>Сотрудники, которые проявляют интерес к развитию, видны и получают возможность карьерного перехода.</p>
+            </div>
+        </div>
+        <h2 class="section-title section-title--small">Как устроена система</h2>
+        <div class="concept-flow">
+            <div class="flow-step">
+                <div class="flow-num">1</div>
+                <div class="flow-content">
+                    <h4>Диагностика</h4>
+                    <p>Определение уровня управления и оценка текущих навыков</p>
+                </div>
+            </div>
+            <div class="flow-connector"></div>
+            <div class="flow-step">
+                <div class="flow-num">2</div>
+                <div class="flow-content">
+                    <h4>Целевые навыки</h4>
+                    <p>Формирование приоритетных навыков для целевого уровня руководителя</p>
+                </div>
+            </div>
+            <div class="flow-connector"></div>
+            <div class="flow-step">
+                <div class="flow-num">3</div>
+                <div class="flow-content">
+                    <h4>Траектория</h4>
+                    <p>Персональная программа из обязательных и рекомендованных тем</p>
+                </div>
+            </div>
+            <div class="flow-connector"></div>
+            <div class="flow-step">
+                <div class="flow-num">4</div>
+                <div class="flow-content">
+                    <h4>Обучение</h4>
+                    <p>Практикумы, кейсы, менторство, обмен опытом</p>
+                </div>
+            </div>
+            <div class="flow-connector"></div>
+            <div class="flow-step">
+                <div class="flow-num">5</div>
+                <div class="flow-content">
+                    <h4>Рост</h4>
+                    <p>Мониторинг прогресса и возможность карьерного перехода</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="audience">
+    <div class="container">
+        <h2 class="section-title">Целевая аудитория</h2>
+        <p class="section-subtitle">Единая система — разные уровни руководителей БТИ</p>
+        <div class="audience-grid">
+            <div class="audience-card audience-card--toggle">
+                <div class="audience-level">◆</div>
+                <div class="audience-card__head">
+                    <h3>L-1 · Операционная эффективность</h3>
+                    <span class="audience-toggle-icon">&#9662;</span>
+                </div>
+                <p>Руководит специалистами.<br>Фокус — на выстраивании рабочих процессов, исполнении задач и развитии команды. Формирует базовые управленческие привычки.</p>
+                <div class="audience-positions">
+                    <div class="audience-pos-group">
+                        <div class="audience-pos-group__title">Филиал</div>
+                        <ul>
+                            <li>Начальник отдела</li>
+                            <li>Главный энергетик</li>
+                            <li>Руководитель ОСТИ, ОПТИ</li>
+                            <li>Руководитель направления КС B2B/B2C</li>
+                        </ul>
+                    </div>
+                    <div class="audience-pos-group">
+                        <div class="audience-pos-group__title">КЦ</div>
+                        <ul>
+                            <li>Ведущий специалист/старший эксперт КЦ</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="audience-card audience-card--toggle">
+                <div class="audience-level">◆◆</div>
+                <div class="audience-card__head">
+                    <h3>L-2 · Управление и масштабирование</h3>
+                    <span class="audience-toggle-icon">&#9662;</span>
+                </div>
+                <p>Руководит линейными руководителями. Управляет несколькими командами, передаёт управленческие инструменты. Синхронизирует подразделения и развивает компетенции внутри команд.</p>
+                <div class="audience-positions">
+                    <div class="audience-pos-group">
+                        <div class="audience-pos-group__title">Филиал</div>
+                        <ul>
+                            <li>Директор СЦ</li>
+                            <li>Директор ЦЭ</li>
+                        </ul>
+                    </div>
+                    <div class="audience-pos-group">
+                        <div class="audience-pos-group__title">КЦ</div>
+                        <ul>
+                            <li>Региональный менеджер КЦ</li>
+                            <li>Руководитель/директор проектов КЦ</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="audience-card audience-card--toggle">
+                <div class="audience-level">◆◆◆</div>
+                <div class="audience-card__head">
+                <h3>L-3 · Стратегия и трансформация</h3>
+                    <span class="audience-toggle-icon">&#9662;</span>
+                </div>
+                <p>Уровень сегмента, филиала или функции. Отвечает за культуру развития компетенций в масштабе подразделения. Задаёт стратегические приоритеты и формирует управленческую команду.</p>
+                <div class="audience-positions">
+                    <div class="audience-pos-group">
+                        <div class="audience-pos-group__title">Филиал</div>
+                        <ul>
+                            <li>Технический директор</li>
+                        </ul>
+                    </div>
+                    <div class="audience-pos-group">
+                        <div class="audience-pos-group__title">КЦ</div>
+                        <ul>
+                            <li>Директор направления/офиса КЦ</li>
+                            <li>Директор программ КЦ</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="program">
+    <div class="container">
+        <h2 class="section-title">Программа развития</h2>
+        <p class="section-subtitle">Освоение навыков для каждого уровня управления</p>
+        <div class="program-note">На основании диагностики руководителю необходимо выбрать 2 обязательных модуля и 1 дополнительный модуль для развития навыков.</div>
+        <div class="program-levels">
+            <button class="program-level-btn active" data-level="1">L-1 <span>Операционная эффективность</span></button>
+            <button class="program-level-btn" data-level="2">L-2 <span>Управление и масштабирование</span></button>
+            <button class="program-level-btn" data-level="3">L-3 <span>Стратегия и трансформация</span></button>
+        </div>
+        <div class="program-panel active" data-panel="1">
+            <div class="program-list">
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#управленческие инструменты</span>Базовые управленческие навыки</h4>
+                            <p>Целеполагание, планирование, делегирование, мотивация, координация, контроль.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li>Как ставить цели в команде — тот самый SMART</li></ul></div>
+                        <div class="program-detail-section"><h4>ТРЕК</h4><ul class="program-detail-list"><li>Руководство для руководителей: ключевые навыки для работы<ul class="program-detail-sublist"><li>Планирование работы и приоритизация задач</li><li>Организация работы команды, делегирование и контроль</li><li>Ключи к мотивам коллектива</li></ul></li></ul></div>
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Ситуационное руководство</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#управление потенциалом команды</span>Управление персоналом: найм, обучение, адаптация, удержание</h4>
+                            <p>Проведение собеседований, организация адаптации и обучения, удержание ценных сотрудников.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ТРЕК</h4><ul class="program-detail-list"><li>HR-навыки для руководителя<ul class="program-detail-sublist"><li>Ключевые задачи в процессе подбора персонала</li><li>Работа с сотрудником: адаптация, сложный разговор, диалоги о карьере</li><li>Создание среды и условий для развития. Работа с вовлеченностью</li><li>Мягкое увольнение. Расстаться и остаться друзьями</li></ul></li></ul></div>
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Удержание сотрудников. Практическое руководство</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#коммуникации</span>Проведение оперативных совещаний</h4>
+                            <p>Определение формата, цели, повестки и состава участников, проведение встречи по структуре, фиксация договоренностей.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li>Мастерская эффективных встреч. Фокус на результат</li></ul></div>
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Удаленные совещания</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#коммуникации</span>Переговоры со смежными подразделениями и партнерами</h4>
+                            <p>Подготовка к встрече, сбор и анализ информации, аргументация, применение техник активного слушания, резюмирование итогов.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li>От слов к делу. Искусство переговоров в деловой среде</li></ul></div>
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Кросс-функциональное взаимодействие</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#коммуникации</span>Подготовка презентаций</h4>
+                            <p>Структурирование материала под целевую аудиторию и цель, выделение главного, визуализация данных.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li><i>Создание презентаций с помощью ИИ — в разработке</i></li></ul></div>
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Power Point. Создаем эффективные презентации</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#работа с клиентом</span>Навыки продаж для юридических лиц малого бизнеса</h4>
+                            <p>Применение этапов продаж, презентация компании и продукта, отработка возражений в сегменте малого бизнеса.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li><i>Практикум с внутренним экспертом</i></li><li><i>Практикум из каталога обучения B2B</i></li></ul></div>
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Продажа идей в организации</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#цифровая грамотность</span>Постановка задач и требований для цифровых изменений</h4>
+                            <p>Создание сложных формул и макросов в Excel, работа с чатами GPT (понимание отличий, написание промптов), создание агентов на базе Нейрошлюза.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li>Уверенный уровень ИИ. Решение нестандартных задач</li><li>Продвинутый уровень ИИ. Создание ассистентов</li></ul></div>
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Нейрошлюз: Осваиваем ИИ-инструменты</li><li>Excel (VBA, Power Query, DAX) / Excel. От новичка до профи</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#внедрение изменений</span>Анализ и устранение узких мест и потерь в процессах</h4>
+                            <p>Анализ процессов, выявление этапов, ограничивающих результат, использование инструментов бережливого производства.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Оптимизатор +. Инструменты бережливого производства</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#финансовое мышление</span>Основы финансовой грамотности</h4>
+                            <p>Знание правил бюджетирования, структуры бюджета, бюджетных процессов, инициирование проектов с финансированием.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li><i>Бизнес-кейс с разбором от внутреннего эксперта</i></li></ul></div>
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Финансы для нефинансистов</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#личные качества</span>Стрессоустойчивость, гибкость и адаптивность</h4>
+                            <p>Быстрое восстановление ресурсов, переключение между задачами, адаптация к новым обстоятельствам, поиск возможностей в стрессовых ситуациях.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Стресс-менеджмент: простые и научно-доказанные методики борьбы со стрессом</li><li>Learning agility: как развивать восприимчивость к изменениям</li></ul></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="program-panel" data-panel="2">
+            <div class="program-list">
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#управленческие инструменты</span>Проектное планирование</h4>
+                            <p>Составление проектных планов на 6–12 месяцев, расчет ресурсов и финансовой составляющей, корректировка плана при наступлении рисков.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Управление проектами<div class="course-footnote">возможность получить ДПО от НИУ ВШЭ</div></li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#управленческие инструменты</span>Анализ и принятие управленческих решений</h4>
+                            <p>Рассмотрение вопросов с разных сторон, оценка рисков и последствий, принятие сложных и непопулярных решений.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li>От анализа к результату: как принимать сложные решения</li></ul></div>
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Инструменты принятия бизнес-решений</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#управление потенциалом команды</span>Формирование и управление командой</h4>
+                            <p>Урегулирование внутрикомандных конфликтов, формирование взаимозаменяемости, подготовка преемников, выстраивание сбалансированной команды.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ТРЕК</h4><ul class="program-detail-list"><li>Развитие команды: мастерство командной игры<ul class="program-detail-sublist"><li>Стадии развития команды</li><li>Развитие команды. Командные роли</li><li>Как создавать доверие в команде</li><li>Развитие сотрудников и команды</li></ul></li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#управление потенциалом команды</span>Вовлечение команды</h4>
+                            <p>Мотивация на общекомандную цель, проведение карьерных диалогов, поддержка и вовлечение в новые задачи.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Как провести диалог с сотрудником в формате 1:1</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#коммуникации</span>Переговоры с внешней средой/внешними клиентами/подрядчикам</h4>
+                            <p>Подготовка аргументов, формирование целей (максимум, минимум, оптимум), выстраивание переговоров с партнерской позиции.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li>Манипуляции в коммуникациях. Что делать, если вами манипулируют?</li></ul></div>
+                        <div class="program-detail-section"><h4>ТРЕК</h4><ul class="program-detail-list"><li>От слов к делу. Искусство переговоров в деловой среде<ul class="program-detail-sublist"><li>Базовые элементы переговоров</li><li>Установление контакта и прояснение интересов</li><li>Аргументация, торг и завершение переговоров</li></ul></li></ul></div>
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Правила проведения эффективных переговоров</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#работа с клиентом</span>Навыки продаж среднему бизнесу</h4>
+                             <p>Применение этапов продаж и знание особенностей клиентов в среднем сегменте B2B.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li><i>Практикум с внутренним экспертом</i></li><li><i>Практикум из каталога обучения B2B</i></li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#цифровая грамотность</span>Инициация цифровых изменений</h4>
+                             <p>Инициирование цифровых изменений.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li>Кейс-практикум «Принятие решений на данных»</li><li>Продвинутый уровень ИИ. Создание ассистентов</li></ul></div>
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Data Talks: о чем говорят данные?</li><li>Доверяй, но проверяй: критическое мышление при работе с искусственным интеллектом</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#внедрение изменений</span>Внедрение изменений</h4>
+                             <p>Вдохновение команды, трансляция сути нововведений, составление плана изменений, работа с сопротивлением.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ТРЕК</h4><ul class="program-detail-list"><li>Лидер перемен: миссия выполнима</li></ul></div>
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Change Management Essentials: лидерство и управление изменениями<div class="course-footnote-italic">возможность получить ДПО от ВШМ СПБГУ</div></li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#финансовое мышление</span>Анализ финансовых показателей и расчет экономической эффективности</h4>
+                            <p>Анализ финансовых показателей и расчет экономической эффективности.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li><i>Бизнес-кейс с разбором от внутреннего эксперта</i></li></ul></div>
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Финансы для нефинансистов</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#личные качества</span>Эмоциональный интеллект и лидерство</h4>
+                             <p>Распознавание и управление своими эмоциями, понимание эмоций других, выстраивание доверительных отношений, лидерское влияние.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Эмоциональный интеллект: управляй и чувствуй</li><li>Быть или казаться: лидерство для руководителей</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#личные качества</span>Навыки системного мышления</h4>
+                             <p>Видение взаимосвязей в процессах, рассмотрение проблем на разных уровнях, объединение данных в единую модель, формирование комплексных решений.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li><i>Сценарное планирование — в разработке</i></li></ul></div>
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Стратегическое мышление: видеть дальше своей команды</li></ul></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="program-panel" data-panel="3">
+            <div class="program-list">
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#управленческие инструменты</span>Стратегическое планирование</h4>
+                             <p>Ориентация на стратегию компании, прогнозирование рисков, формирование плана работы на год, декомпозиция годовых целей для команды.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Стратегическое развитие организации</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#управленческие инструменты</span>Управление рисками</h4>
+                             <p>Отслеживание глобальных трендов, предвосхищение и минимизация рисков, принятие решений с перспективой на 1–2 года.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Управление рисками</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#управленческие инструменты</span>Управление процессами</h4>
+                             <p>Понимание взаимосвязи процессов, анализ эффективности, знание стандартов СМК, формирование предложений по улучшению процессов.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><i>(требуется уточнение)</i></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#управленческие инструменты</span>Коучинговые инструменты руководителя</h4>
+                             <p>Применение коучинговых инструментов, создание комфортной среды для развития, раскрытие потенциала сотрудников.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Коучинговые технологии для бизнеса</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#управление потенциалом команды</span>Управление человеческим и командным потенциалом</h4>
+                             <p>Планирование подготовки преемников, формирование потребности в развитии, реализация мероприятий по усилению командного потенциала.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li><i>Практикум по управлению командой</i></li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#коммуникации</span>Навыки публичных выступлений</h4>
+                             <p>Формирование структуры выступления, взаимодействие с аудиторией, ответы на сложные вопросы, управление голосом и жестикуляцией.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ТРЕК</h4><ul class="program-detail-list"><li>Сила спикера. Публичные выступления в бизнесе</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#коммуникации</span>Навыки ведения сложных переговоров</h4>
+                             <p>Аргументированное отстаивание позиции, управление динамикой переговоров, поиск решений с учетом интересов всех сторон.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Мощные инструменты влияния</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#работа с клиентом</span>Клиентоцентричность</h4>
+                             <p>Предложение решений, предвосхищающих ожидания клиента, учет его интересов и целей компании.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li><i>Практикум с внутренним экспертом</i></li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#работа с клиентом</span>Переговоры с крупным бизнесом</h4>
+                             <p>Ведение переговоров, презентация сложных технических решений, отработка возражений в сегменте крупного бизнеса.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li><i>Практикум с внутренним экспертом</i></li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#цифровая грамотность</span>Внедрение цифровых изменений</h4>
+                             <p>Ориентация в облачных технологиях, знание компонентов ИТ-инфраструктуры, управление цифровыми ресурсами.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Digital Essentials: цифровая трансформация бизнеса<div class="course-footnote-italic">возможность получить ДПО от ВШМ СПБГУ</div></li><li>Искусственный интеллект для бизнеса: от идеи до результата</li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#внедрение изменений</span>Инструменты операционной эффективности</h4>
+                             <p>Знание и внедрение инструментов операционной эффективности, помощь линейным руководителям в улучшении процессов.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><i>(требуется уточнение)</i></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#финансовое мышление</span>Планирование и управление финансами</h4>
+                             <p>Знание финансовых показателей (OIBDA, FCF и др.), управление бюджетом, контроль затрат/доходов, расчет рентабельности.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>ONLINE-ПРАКТИКУМ</h4><ul class="program-detail-list"><li><i>Бизнес-кейс с разбором от внутреннего эксперта</i></li></ul></div>
+                    </div>
+                </div>
+                <div class="program-item">
+                    <div class="program-item-head">
+                        <div>
+                            <h4><span class="program-hash">#личные качества</span>Управление личным брендом</h4>
+                             <p>Создание и развитие личного бренда, построение нетворкинга, позиционирование себя как эксперта, презентация своих успехов и результатов команды.</p>
+                        </div>
+                        <span class="program-item-arrow">&#9656;</span>
+                    </div>
+                    <div class="program-item-body">
+                        <div class="program-detail-section"><h4>КУРС В ОУ</h4><ul class="program-detail-list"><li>Твой личный бренд в компании</li></ul></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="formats">
+    <div class="container">
+        <h2 class="section-title">Форматы обучения</h2>
+        <div class="formats-grid">
+            <div class="format-card">
+                <div class="format-icon">&#9654;</div>
+                <h4 class="format-name">Онлайн-курсы</h4>
+                <p class="format-desc">Гибкий формат для теоретической базы. Включает тесты и тренажёры.</p>
+                <div class="format-levels">
+                    <div class="format-level-dot active"></div>
+                    <div class="format-level-dot active"></div>
+                    <div class="format-level-dot active"></div>
+                </div>
+            </div>
+            <div class="format-card">
+                <div class="format-icon">&#10045;</div>
+                <h4 class="format-name">Обучение с тренером</h4>
+                <p class="format-desc">Практикумы с корпоративными тренерами. Глубокая проработка навыков, работа с кейсами.</p>
+                <div class="format-levels">
+                    <div class="format-level-dot active"></div>
+                    <div class="format-level-dot active"></div>
+                    <div class="format-level-dot active"></div>
+                </div>
+            </div>
+            <div class="format-card">
+                <div class="format-icon">&#9873;</div>
+                <h4 class="format-name">Бизнес-игры и симуляции</h4>
+                <p class="format-desc">Моделирование управленческих ситуаций. Развитие системного мышления и принятие решений.</p>
+                <div class="format-levels">
+                    <div class="format-level-dot active"></div>
+                    <div class="format-level-dot active"></div>
+                    <div class="format-level-dot" style="background:#e2e8f0;"></div>
+                </div>
+            </div>
+            <div class="format-card">
+                <div class="format-icon">&#9733;</div>
+                <h4 class="format-name">Мастермайнды</h4>
+                <p class="format-desc">Структурированные групповые сессии. Решение бизнес-задач через обмен опытом.</p>
+                <div class="format-levels">
+                    <div class="format-level-dot" style="background:#e2e8f0;"></div>
+                    <div class="format-level-dot active"></div>
+                    <div class="format-level-dot active"></div>
+                </div>
+            </div>
+            <div class="format-card">
+                <div class="format-icon">&#9672;</div>
+                <h4 class="format-name">Менторинг</h4>
+                <p class="format-desc">Передача опыта от ментора. Долгосрочное развитие.</p>
+                <div class="format-levels">
+                    <div class="format-level-dot" style="background:#e2e8f0;"></div>
+                    <div class="format-level-dot" style="background:#e2e8f0;"></div>
+                    <div class="format-level-dot active"></div>
+                </div>
+            </div>
+            <div class="format-card">
+                <div class="format-icon">&#8644;</div>
+                <h4 class="format-name">Peer-to-peer</h4>
+                <p class="format-desc">Взаимная оценка заданий и обратная связь между участниками.</p>
+                <div class="format-levels">
+                    <div class="format-level-dot active"></div>
+                    <div class="format-level-dot active"></div>
+                    <div class="format-level-dot" style="background:#e2e8f0;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="results">
+    <div class="container">
+        <h2 class="section-title">Результаты системы</h2>
+        <p class="section-subtitle">Измеримый эффект для бизнеса и развитие участников</p>
+        <div class="results-grid">
+            <div class="results-block">
+                <h3>Для бизнеса</h3>
+                <div class="result-item">
+                    <div class="result-icon">&#10003;</div>
+                    <div class="result-text">
+                        <strong>Единые стандарты управления</strong>
+                        <p>Общий язык и подходы на всех уровнях руководства</p>
+                    </div>
+                </div>
+                <div class="result-item">
+                    <div class="result-icon">&#10003;</div>
+                    <div class="result-text">
+                        <strong>Кадровый потенциал</strong>
+                        <p>Готовые руководители для замещения ключевых позиций</p>
+                    </div>
+                </div>
+                <div class="result-item">
+                    <div class="result-icon">&#10003;</div>
+                    <div class="result-text">
+                        <strong>Синергия подразделений</strong>
+                        <p>Кросс-функциональные связи через совместное обучение</p>
+                    </div>
+                </div>
+            </div>
+            <div class="results-block">
+                <h3>Для участников</h3>
+                <div class="result-item">
+                    <div class="result-icon">&#10003;</div>
+                    <div class="result-text">
+                        <strong>Персональная траектория</strong>
+                        <p>Понятный путь от текущей роли к следующему уровню</p>
+                    </div>
+                </div>
+                <div class="result-item">
+                    <div class="result-icon">&#10003;</div>
+                    <div class="result-text">
+                        <strong>Практические инструменты</strong>
+                        <p>Навыки, которые применяются сразу после обучения</p>
+                    </div>
+                </div>
+                <div class="result-item">
+                    <div class="result-icon">&#10003;</div>
+                    <div class="result-text">
+                        <strong>Поддержка менторов</strong>
+                        <p>Обратная связь и развитие от опытных руководителей в БТИ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Modal -->
+<div id="skillModal" class="modal-overlay">
+    <div class="modal-container">
+        <button class="modal-close">&times;</button>
+        <h3 class="modal-title" id="modalTitle"></h3>
+        <div class="modal-content">
+            <div class="modal-block">
+                <h4>Темы практикумов</h4>
+                <ul id="modalTopics"></ul>
+            </div>
+            <div class="modal-block">
+                <h4>Результат обучения</h4>
+                <p id="modalResult"></p>
+                <ul id="modalSkills"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <span>Система развития руководителей БТИ &copy; 2026</span>
+        <span>Концепт-драфт v1.0 &middot; Обновлено: август 2026</span>
+    </div>
+</footer>
+
+<script>
+    // Accordion
+    document.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const item = header.parentElement;
+            item.classList.toggle('active');
+        });
+    });
+
+    // Audience card toggle (L1)
+    document.querySelectorAll('.audience-card--toggle').forEach(card => {
+        card.addEventListener('click', () => {
+            card.classList.toggle('is-open');
+        });
+    });
+
+    // Program level tabs
+    document.querySelectorAll('.program-level-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const level = btn.dataset.level;
+            document.querySelectorAll('.program-level-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.program-panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelector('.program-panel[data-panel="' + level + '"]').classList.add('active');
+        });
+    });
+
+    // Program card -> expandable list
+    document.querySelectorAll('.program-item').forEach(item => {
+        item.querySelector('.program-item-head').addEventListener('click', () => {
+            item.classList.toggle('open');
+        });
+    });
+
+    // Skill data for modal
+    const skillData = {
+        'Целеполагание': {
+            topics: ['Как ставить цели в команде — тот самый SMART'],
+            result: 'Сотрудник научится формулировать цели по методологии SMART, ставить краткосрочные и среднесрочные задачи себе и команде.',
+            skills: [
+                'Формулировать конкретные, измеримые, амбициозные, релевантные и ограниченные по времени цели',
+                'Ставить цели как для отдельного сотрудника, так и для команды в целом',
+                'Выстраивать дерево целей и понимать соподчинённость задач',
+                'Разбивать долгосрочные цели на подзадачи и этапы'
+            ]
+        },
+        'Планирование': {
+            topics: ['Срочно или важно? Мастер-класс по тайм-менеджменту'],
+            result: 'Сотрудник освоит инструменты планирования и организации времени.',
+            skills: [
+                'Планировать рабочие задачи на день, неделю, месяц и квартал',
+                'Использовать систему GTD и жёстко-гибкое планирование',
+                'Распознавать «поглотители времени» и оптимизировать их',
+                'Управлять личными и рабочими сроками'
+            ]
+        },
+        'Делегирование': {
+            topics: ['(в разработке)'],
+            result: 'Практикум находится в разработке.',
+            skills: [
+                'Распределять задачи в соответствии с сильными сторонами сотрудников',
+                'Предоставлять полномочия и необходимую поддержку при делегировании',
+                'Знать правила делегирования и применять их при постановке задач'
+            ]
+        },
+        'Обратная связь сотрудникам': {
+            topics: ['Спасибо за отзыв или испытание обратной связью в команде', 'Диалог с сотрудником 1:1: как эффективно проводить встречу'],
+            result: 'Сотрудник научится давать структурированную обратную связь для развития подчинённых.',
+            skills: [
+                'Давать структурированную обратную связь разного типа (мотивирующая, развивающая, критическая)',
+                'Проводить промежуточные и итоговые встречи для обратной связи',
+                'Поддерживать и мотивировать сотрудников через обратную связь',
+                'Эффективно проводить встречи один-на-один'
+            ]
+        },
+        'Мотивация команды': {
+            topics: ['Вовлечённость команды: как повысить интерес к делу?', 'Гибкий я: ситуационное лидерство и управление командой'],
+            result: 'Сотрудник освоит методы выявления мотиваторов и повышения вовлечённости команды.',
+            skills: [
+                'Выявлять основные мотиваторы подчинённых в ходе беседы',
+                'Мотивировать сотрудников исходя из выявленной мотивации',
+                'Повышать интерес к делу и вовлечённость команды',
+                'Мотивировать на выполнение персональных задач и командных целей'
+            ]
+        },
+        'Контроль исполнения': {
+            topics: ['Сказано — сделано: личная ответственность и командная взаимопомощь'],
+            result: 'Сотрудник научится выделять точки контроля и применять разные виды контроля.',
+            skills: [
+                'Выделять точки контроля при планировании',
+                'Проводить промежуточный, итоговый и оперативный контроль',
+                'Знать и применять разные виды и способы контроля',
+                'Доводить задачу до результата и корректировать отклонения'
+            ]
+        },
+        'Проведение оперативных совещаний': {
+            topics: ['(в разработке)'],
+            result: 'Практикум находится в разработке.',
+            skills: [
+                'Знать форматы встреч и когда их применять',
+                'Формулировать цель, повестку и определять состав участников',
+                'Структурированно проводить встречу и фиксировать договорённости',
+                'Составлять протокол по итогам встречи в реальном времени'
+            ]
+        },
+        'Навыки наставничества': {
+            topics: ['(в разработке)'],
+            result: 'Практикум находится в разработке.',
+            skills: [
+                'Устанавливать доверие с новым сотрудником',
+                'Составлять план стажировки и передавать информацию понятно',
+                'Задавать вопросы, проясняющие понимание у нового сотрудника',
+                'Находить индивидуальный подход и давать развивающую обратную связь новичку'
+            ]
+        },
+        'Управление командой': {
+            topics: ['5F Геометрия команды: модель развития команды', 'Формирование и управление командой'],
+            result: 'Сотрудник научится формировать сбалансированную команду и управлять её развитием.',
+            skills: [
+                'Комплексно оценивать подчинённых (личные качества, навыки, результативность)',
+                'Понимать важность командных ролей и выстраивать сбалансированную команду',
+                'Распределять задачи исходя из сильных сторон команды',
+                'Формировать среду эффективного и партнёрского взаимодействия'
+            ]
+        },
+        'Сложные переговоры': {
+            topics: ['От слов к делу: теория и практика успешных переговоров', 'Черный пояс по «корпоратэ»: эффективные коммуникации'],
+            result: 'Сотрудник освоит техники подготовки и проведения сложных переговоров.',
+            skills: [
+                'Подготавливать аргументацию и структуру коммуникации до встречи',
+                'Применять техники активного слушания',
+                'Аргументированно отстаивать свою точку зрения',
+                'Приходить к взаимовыгодным договорённостям',
+                'Управлять динамикой в ходе сложных переговоров'
+            ]
+        },
+        'Бюджетирование': {
+            topics: ['Когда цифры решают всё: оценка экономической эффективности внедрения технологии'],
+            result: 'Сотрудник научится понимать структуру бюджета и управлять финансами в зоне ответственности.',
+            skills: [
+                'Знать правила бюджетирования и структуру бюджета',
+                'Понимать факторы влияния на изменение бюджета',
+                'Взаимодействовать с сотрудниками финансовых подразделений',
+                'Анализировать причины исполнения/неисполнения плана',
+                'Инициировать проекты, связанные с финансированием'
+            ]
+        },
+        'Анализ и принятие решений': {
+            topics: ['От анализа к результату: как принимать сложные решения', 'Фреймворк Cynefin: теория запутанности'],
+            result: 'Сотрудник освоит методы анализа данных и принятия управленческих решений.',
+            skills: [
+                'Принимать решения на основе аналитических данных',
+                'Рассматривать вопросы с разных сторон для принятия решений',
+                'Видеть риски и последствия управленческих решений',
+                'Принимать сложные управленческие решения, в том числе непопулярные',
+                'Различать типы контекстов (простый, сложный, запутанный, хаотичный) для выбора подхода'
+            ]
+        },
+        'Управление процессами': {
+            topics: ['(в разработке)'],
+            result: 'Практикум находится в разработке.',
+            skills: [
+                'Анализировать процессы и находить этапы, которые замедляют результат',
+                'Предлагать и реализовывать улучшения, устранять узкие места',
+                'Знать ресурсы компании, ориентированные на улучшения',
+                'Внедрять инновационные решения и тестировать новые подходы'
+            ]
+        },
+        'Формирование кадрового резерва': {
+            topics: ['Бизнес-симуляция "Оценка таланта: инструмент матрица 9-box"'],
+            result: 'Сотрудник научится выявлять потенциал сотрудников и готовить преемников.',
+            skills: [
+                'Применять инструмент матрица 9-box для оценки сотрудников',
+                'Проводить карьерные диалоги с сотрудниками',
+                'Организовывать подготовку преемников на ключевые позиции',
+                'Распознавать сотрудников с риском увольнения и проводить Stay-интервью',
+                'Формировать взаимозаменяемость сотрудников внутри команды'
+            ]
+        },
+        'Клиентоцентричность': {
+            topics: ['Профили целевой аудитории: как понять потребности своих клиентов', 'Идеи для людей: как создавать проекты и продукты'],
+            result: 'Сотрудник научится выявлять потребности клиентов и формировать клиентоцентричный подход.',
+            skills: [
+                'Проводить UX-исследования клиентов и анализировать контекст',
+                'Проявлять эмпатию и формировать персонализированные предложения',
+                'Интегрировать интересы клиента в решение',
+                'Организовывать Customer Development и партнёрскую позицию'
+            ]
+        },
+        'Стратегическое планирование': {
+            topics: ['(в разработке)'],
+            result: 'Практикум находится в разработке.',
+            skills: [
+                'Знать стратегию компании и ориентироваться на неё в работе',
+                'Отслеживать глобальные тренды и тенденции развития отрасли',
+                'Принимать решения с перспективой на будущее (минимум 1-2 года)',
+                'Формировать план работы не менее чем на 1 год',
+                'Составлять декомпозицию годовых целей для своей команды'
+            ]
+        },
+        'Управление рисками': {
+            topics: ['(в разработке)'],
+            result: 'Практикум находится в разработке.',
+            skills: [
+                'Прогнозировать риски и предвосхищать их наступление',
+                'Минимизировать негативное влияние рисков на результат',
+                'Знать и применять инструменты операционной эффективности',
+                'Анализировать риски при принятии управленческих решений'
+            ]
+        },
+        'Коучинговый подход': {
+            topics: ['(в разработке)'],
+            result: 'Практикум находится в разработке.',
+            skills: [
+                'Знать и уметь применять коучинговые инструменты в управлении',
+                'Раскрывать потенциал сотрудников через коучинговый подход',
+                'Создавать среду, в которой сотрудники не боятся допускать ошибки',
+                'Формировать потребность в развитии и обучении у команды'
+            ]
+        },
+        'Внедрение изменений': {
+            topics: ['Управление изменениями для сотрудников. Как проживать изменения'],
+            result: 'Сотрудник научится управлять изменениями и работать с сопротивлением.',
+            skills: [
+                'Вдохновлять команду на эксперименты и инициативы',
+                'Транслировать суть и возможности нововеществ, вовлекать в них команду',
+                'Составлять и реализовывать план изменений',
+                'Работать с сопротивлением изменений у сотрудников',
+                'Обеспечивать обучение сотрудников новым процессам и навыкам'
+            ]
+        },
+        'Управление человеческим потенциалом': {
+            topics: ['(в разработке)'],
+            result: 'Практикум находится в разработке.',
+            skills: [
+                'Создавать честную комфортную среду для развития сотрудников',
+                'Планировать и реализовывать мероприятия по повышению эффективности',
+                'Формировать культуру непрерывных улучшений в команде',
+                'Поддерживать и предоставлять ресурсы для тестирования новых идей',
+                'Масштабировать успешные эксперименты и внедрять инновационные практики'
+            ]
+        },
+        'Финансовое мышление': {
+            topics: ['(в разработке)'],
+            result: 'Практикум находится в разработке.',
+            skills: [
+                'Знать основные финансовые показатели: OIBDA, FCF, выручка, маржинальность',
+                'Принимать решения, влияющие на улучшение финансовых показателей',
+                'Контролировать затраты/доходы в зоне ответственности',
+                'Рассчитывать экономическую рентабельность проекта',
+                'Управлять бюджетом и формировать инвестиционный план'
+            ]
+        },
+        'Системное мышление': {
+            topics: ['(в разработке)'],
+            result: 'Практикум находится в разработке.',
+            skills: [
+                'Видеть взаимосвязи в процессах',
+                'Рассматривать проблемы на разных уровнях',
+                'Объединять данные из разных источников в единую модель',
+                'Формировать комплексные решения для сложных ситуаций',
+                'Управлять процессами с учётом их взаимосвязей и сквозных процессов'
+            ]
+        }
+    };
+
+    // Modal functionality
+    const modal = document.getElementById('skillModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalTopics = document.getElementById('modalTopics');
+    const modalResult = document.getElementById('modalResult');
+    const modalSkills = document.getElementById('modalSkills');
+
+    function openModal(skillName) {
+        const data = skillData[skillName];
+        if (!data) return;
+
+        modalTitle.textContent = skillName;
+
+        modalTopics.innerHTML = '';
+        data.topics.forEach(topic => {
+            const li = document.createElement('li');
+            li.textContent = topic;
+            modalTopics.appendChild(li);
+        });
+
+        modalResult.textContent = data.result;
+
+        modalSkills.innerHTML = '';
+        data.skills.forEach(skill => {
+            const li = document.createElement('li');
+            li.textContent = skill;
+            modalSkills.appendChild(li);
+        });
+
+        modal.classList.add('active');
+    }
+
+    function closeModal() {
+        modal.classList.remove('active');
+    }
+
+    document.querySelectorAll('.accordion-skills li').forEach(li => {
+        li.addEventListener('click', () => {
+            const skillName = li.textContent;
+            openModal(skillName);
+        });
+    });
+
+    document.querySelector('.modal-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
+
+    // Structure steps expand
+    document.querySelectorAll('.structure-step').forEach(step => {
+        step.addEventListener('click', () => {
+            const isExpanded = step.classList.contains('expanded');
+            document.querySelectorAll('.structure-step').forEach(s => s.classList.remove('expanded'));
+            if (!isExpanded) step.classList.add('expanded');
+        });
+    });
+</script>
+</body>
+</html>
