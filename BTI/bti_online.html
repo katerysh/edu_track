@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Управленческий цикл: от цели к результату — онлайн-программа для руководителей БТИ</title>
+<style>
+  :root{
+    --bg:#0f1115; --bg2:#161a22; --card:#1c212b; --card2:#222837;
+    --line:#2c3340; --txt:#eef1f6; --muted:#9aa6b8; --muted2:#6f7c90;
+    --brand:#FF4F12;      /* Rostelecom Orange — основной */
+    --brand2:#7700FF;     /* Rostelecom Purple — основной */
+    --slate:#7B939B;      /* Rostelecom Slate — серый */
+    --blue:#273A64;       /* Rostelecom Dark Blue — дополнительный */
+    --radius:18px; --shadow:0 18px 50px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; font-family:Inter,system-ui,apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:radial-gradient(1100px 660px at 82% -12%, #2a0b54 0%, rgba(39,58,100,.28) 42%, var(--bg) 72%) fixed;
+    color:var(--txt); line-height:1.55; -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit}
+  h1,h2,h3,h4{margin:0; line-height:1.15; letter-spacing:-.01em}
+  p{margin:0}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 22px}
+  .eyebrow{display:inline-block; font-size:13px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--brand2)}
+
+  /* HERO */
+  .hero{padding:88px 0 60px; position:relative; overflow:hidden}
+  .hero h1{font-size:clamp(32px,5.4vw,58px); font-weight:800; margin:18px 0 14px; max-width:14ch}
+  .hero .lead{font-size:clamp(16px,2vw,20px); color:var(--muted); max-width:62ch}
+  .hero-meta{display:flex; flex-wrap:wrap; gap:10px; margin-top:26px}
+  .chip{background:var(--card); border:1px solid var(--slate); padding:9px 14px; border-radius:999px; font-size:14px; color:var(--txt)}
+  .chip b{color:var(--brand2)}
+  .cta{display:inline-flex; align-items:center; gap:10px; margin-top:30px; background:linear-gradient(120deg,var(--brand),#ff9a3c); color:#ffffff; font-weight:800; text-decoration:none; padding:15px 26px; border-radius:14px; font-size:16px; box-shadow:0 12px 30px rgba(255,79,18,.35); transition:transform .15s ease}
+  .cta:hover{transform:translateY(-2px)}
+
+  /* SECTION */
+  section.block{padding:54px 0}
+  .section-title{font-size:clamp(24px,3.4vw,36px); font-weight:800; margin-bottom:8px}
+  .section-subtitle{color:var(--muted); font-size:17px; max-width:70ch; margin-bottom:30px}
+
+  /* ABOUT CARDS */
+  .about-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px}
+  .acard{background:linear-gradient(180deg,var(--card),var(--bg2)); border:1px solid var(--line); border-radius:var(--radius); padding:22px}
+  .acard .k{font-size:13px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--brand2); margin-bottom:10px}
+  .acard h3{font-size:19px; margin-bottom:8px}
+  .acard p{color:var(--muted); font-size:15px}
+
+  /* CYCLE */
+  .cycle-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; counter-reset:step}
+  .step{position:relative; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:20px 20px 20px 64px; transition:transform .15s ease, border-color .15s}
+  .step:hover{transform:translateY(-3px); border-color:var(--brand)}
+  .step::before{counter-increment:step; content:counter(step); position:absolute; left:18px; top:18px; width:32px; height:32px; border-radius:9px; background:linear-gradient(120deg,var(--brand2),#b673ff); color:#fff; font-weight:800; display:grid; place-items:center}
+  .step h4{font-size:17px; margin-bottom:6px}
+  .step p{color:var(--muted); font-size:14px}
+
+  /* PROGRAM (AGENTS.md convention) */
+  .note{background:var(--card2); border:1px solid var(--line); border-left:4px solid var(--brand); border-radius:12px; padding:14px 18px; color:var(--muted); font-size:15px; margin-bottom:26px}
+  .levels{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:26px; justify-content:space-evenly}
+  .level-btn{display:inline-flex; align-items:baseline; gap:8px; background:var(--card); border:1px solid var(--line); color:var(--txt); border-radius:12px; padding:12px 16px; cursor:pointer; font-size:15px; font-weight:600; transition:.15s; flex:1 1 calc(50% - 5px); justify-content:center}
+  .level-btn span{display:block; font-size:12.5px; color:var(--muted); font-weight:500}
+  .level-btn:hover{border-color:var(--brand2)}
+  .level-btn.active{background:linear-gradient(120deg,var(--brand),#ff9a3c); color:#ffffff; border-color:transparent}
+  .level-btn.active span{color:rgba(255,255,255,.88)}
+
+  .panel{display:none}
+  .panel.active{display:block; animation:fade .35s ease}
+  @keyframes fade{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+
+  .list{display:flex; flex-direction:column; gap:14px}
+  .item{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; transition:border-color .15s}
+  .item.open{border-color:var(--brand)}
+  .item-head{display:flex; align-items:flex-start; gap:16px; padding:20px 22px; cursor:pointer}
+  .item-head>div{flex:1}
+  .item-head h4{font-size:19px; display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+  .hash{font-size:12px; font-weight:700; color:var(--brand2); background:rgba(255,79,18,.12); border:1px solid rgba(255,79,18,.3); padding:3px 9px; border-radius:999px}
+  .item-title{flex:1 1 100%}
+  .item-head p{color:var(--muted); font-size:14px; margin-top:6px}
+  .item-arrow{flex:none; color:var(--muted2); font-size:20px; transition:transform .25s; padding-top:2px}
+  .item.open .item-arrow{transform:rotate(90deg); color:var(--brand)}
+  .item-body{max-height:0; overflow:hidden; transition:max-height .4s ease}
+  .item.open .item-body{max-height:4000px}
+
+  .detail-section{padding:4px 22px 18px}
+  .detail-section h4{font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--brand2); margin:14px 0 10px}
+  .detail-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px}
+  .detail-list>li{position:relative; padding-left:22px; color:#dfe5ef; font-size:15px}
+  .detail-list>li::before{content:""; position:absolute; left:2px; top:9px; width:8px; height:8px; border-radius:50%; background:var(--brand)}
+  .detail-sublist{list-style:none; margin:8px 0 0; padding-left:18px; display:flex; flex-direction:column; gap:6px}
+  .detail-sublist>li{position:relative; padding-left:18px; color:var(--muted); font-size:14px}
+  .detail-sublist>li::before{content:""; position:absolute; left:0; top:8px; width:6px; height:6px; border-radius:50%; background:var(--muted2)}
+  .detail-list li i{color:var(--muted); font-style:italic}
+
+  .structure{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0}
+  .structure>li{display:grid; grid-template-columns:1fr auto; gap:6px 16px; padding:13px 0; border-bottom:1px dashed var(--line)}
+  .structure>li:last-child{border-bottom:0}
+  .structure .b-name{font-weight:700; font-size:15.5px}
+  .structure .b-time{justify-self:end; align-self:center; background:rgba(119,0,255,.14); color:var(--brand2); border:1px solid rgba(119,0,255,.3); font-size:12.5px; font-weight:700; padding:3px 10px; border-radius:999px}
+  .structure .b-text{grid-column:1/-1; color:var(--muted); font-size:14px; margin-top:2px}
+
+  /* COMPLEX HOMEWORK */
+  .hw{background:linear-gradient(180deg,var(--card2),var(--bg2)); border:1px solid var(--line); border-left:4px solid var(--brand2); border-radius:var(--radius); padding:30px 28px; box-shadow:var(--shadow)}
+  .hw-badge{display:inline-block; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--brand2); background:rgba(119,0,255,.12); border:1px solid rgba(119,0,255,.35); padding:5px 12px; border-radius:999px; margin-bottom:14px}
+  .hw-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px}
+  .hw-card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px}
+  .hw-card .hw-ico{font-size:24px; margin-bottom:8px}
+  .hw-card h4{font-size:16.5px; margin-bottom:6px}
+  .hw-card p{color:var(--muted); font-size:14px}
+  .hw-foot{margin-top:18px; color:var(--muted); font-size:14.5px; border-top:1px dashed var(--line); padding-top:16px}
+
+  /* SUMMARY TABLE */
+  .summary-table{width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden}
+  .summary-table th,.summary-table td{text-align:left; padding:15px 18px; border-bottom:1px solid var(--line); font-size:15px; vertical-align:top}
+  .summary-table tr:last-child th,.summary-table tr:last-child td{border-bottom:0}
+  .summary-table th{width:38%; color:var(--muted); font-weight:600}
+  .summary-table td{color:var(--txt)}
+
+  footer{padding:60px 0 70px; text-align:center}
+  footer .cta{margin-top:0}
+  .foot-note{color:var(--slate); font-size:13px; margin-top:34px}
+  .foot-logo{margin-top:32px}
+
+  @media(max-width:620px){
+    .structure>li{grid-template-columns:1fr}
+    .structure .b-time{justify-self:start}
+    .summary-table th{width:42%}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Онлайн-программа для руководителей БТИ</span>
+    <h1>Управленческий цикл: от цели к результату</h1>
+    <p class="lead">Системный трек из 4 практикумов, который превращает интуитивное руководство в управление по 6-этапному циклу — от постановки цели до обратной связи.</p>
+    <div class="hero-meta">
+      <span class="chip"><b>4</b> практикума</span>
+      <span class="chip"><b>10</b> часов</span>
+      <span class="chip"><b>6</b> этапов цикла</span>
+      <span class="chip">Онлайн с тренером</span>
+      <span class="chip">Домашние задания</span>
+    </div>
+    <a class="cta" href="#program">Смотреть программу →</a>
+  </div>
+</header>
+
+<section class="block">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="acard">
+        <div class="k">Для кого</div>
+        <h3>Целевая аудитория</h3>
+        <p>Руководители БТИ, у которых есть пробелы в навыках целеполагания, планирования, делегирования, мотивации и обратной связи.</p>
+      </div>
+      <div class="acard">
+        <div class="k">Проблема</div>
+        <h3>Почему это нужно</h3>
+        <p>Руководители действуют интуитивно, без системного подхода — это ведёт к невыполнению KPI, демотивации команды и операционному хаосу.</p>
+      </div>
+      <div class="acard">
+        <div class="k">Цель трека</div>
+        <h3>Что даёт программа</h3>
+        <p>Сформировать системное понимание управленческого цикла из 6 этапов и отработать практические навыки по каждому из них.</p>
+      </div>
+      <div class="acard">
+        <div class="k">Формат</div>
+        <h3>Как проходит</h3>
+        <p>Серия из 4 взаимосвязанных онлайн-практикумов по 2,5 часа с тренером + домашние задания с применением навыков в работе.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="section-title">Управленческий цикл — основа трека</h2>
+    <p class="section-subtitle">6 последовательных этапов, которые превращают цель в результат. Каждый практикум закрывает конкретные этапы этого цикла.</p>
+    <div class="cycle-grid">
+      <div class="step"><h4>Целеполагание</h4><p>Формулировка чётких, измеримых целей для себя и команды.</p></div>
+      <div class="step"><h4>Планирование</h4><p>Декомпозиция целей на задачи, распределение по срокам и ресурсам.</p></div>
+      <div class="step"><h4>Организация деятельности</h4><p>Распределение задач между сотрудниками — делегирование.</p></div>
+      <div class="step"><h4>Мотивация</h4><p>Создание условий, чтобы сотрудники хотели выполнять задачи.</p></div>
+      <div class="step"><h4>Контроль</h4><p>Отслеживание выполнения, сверка с планом, корректировка.</p></div>
+      <div class="step"><h4>Обратная связь</h4><p>Подведение итогов, поддержка и коррекция поведения.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="program" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="section-title">Программа трека</h2>
+    <p class="section-subtitle">4 практикума, каждый из которых прорабатывает свои этапы управленческого цикла. Откройте карточку, чтобы увидеть, что участники будут знать, уметь и как устроен практикум.</p>
+    <div class="note">Практикумы связаны между собой: навыки и рабочая тетрадь (цели, «Дерево целей», карта мотивации, план на квартал) накапливаются от занятия к занятию и собираются в итоговую «Бизнес-симуляцию».</div>
+
+    <div class="levels">
+      <button class="level-btn active" data-level="1">Практикум №1<span>Целеполагание и планирование</span></button>
+      <button class="level-btn" data-level="2">Практикум №2<span>Организация и контроль</span></button>
+      <button class="level-btn" data-level="3">Практикум №3<span>Мотивация и обратная связь</span></button>
+      <button class="level-btn" data-level="4">Практикум №4<span>Бизнес-симуляция. Итог</span></button>
+    </div>
+
+    <!-- PANEL 1 -->
+    <div class="panel active" data-panel="1">
+      <div class="list">
+        <div class="item">
+          <div class="item-head">
+            <div>
+              <h4><span class="hash">#целеполагание #планирование</span><span class="item-title">Практикум №1: «Целеполагание и планирование»</span></h4>
+            </div>
+            <span class="item-arrow">&#9656;</span>
+          </div>
+          <div class="item-body">
+            <div class="detail-section"><h4>Что будут знать</h4>
+              <ul class="detail-list">
+                <li>Управленческий цикл из 6 этапов и почему важна последовательность.</li>
+                <li>Правила постановки целей по SMART.</li>
+                <li>Инструмент «Дерево целей» для декомпозиции.</li>
+                <li>Разницу между операционным и проектным планированием.</li>
+                <li>Правило 60% времени для жёсткого планирования.</li>
+                <li>Основные «пожиратели времени» руководителя.</li>
+              </ul>
+            </div>
+            <div class="detail-section"><h4>Что будут уметь</h4>
+              <ul class="detail-list">
+                <li>Формулировать свои профессиональные цели и цели команды по SMART.</li>
+                <li>Декомпозировать цели на задачи с помощью «Дерева целей».</li>
+                <li>Выделять ключевые цели на месяц и квартал.</li>
+                <li>Планировать деятельность, распределяя время между регулярными и проектными задачами.</li>
+              </ul>
+            </div>
+            <div class="detail-section"><h4>Структура практикума (2.5 часа)</h4>
+              <ul class="structure">
+                <li><span class="b-name">Введение</span><span class="b-time">15 мин</span><span class="b-text">Знакомство. Вопросы участникам: мои цели на обучение, мои управленческие вызовы.</span></li>
+                <li><span class="b-name">Управленческий цикл</span><span class="b-time">15 мин</span><span class="b-text">Мини-лекция: 6 этапов управления. Упражнение «Кораблик» из программы — 6 добровольцев, каждый получает один этап цикла и делает кораблик, используя ТОЛЬКО свою функцию. Наблюдение и выводы о важности последовательности.</span></li>
+                <li><span class="b-name">Целеполагание по SMART</span><span class="b-time">45 мин</span><span class="b-text">Дискуссия «Цель vs Мечта». Мини-лекция по SMART. Практика: участники формулируют 2–3 свои профессиональные цели на квартал по SMART и фиксируют в рабочей тетради.</span></li>
+                <li><span class="b-name">Декомпозиция и планирование</span><span class="b-time">40 мин</span><span class="b-text">Мини-лекция: «Дерево целей». Практика в группах: декомпозиция SMART-цели на задачи по месяцам. Мини-лекция: операционное vs проектное планирование, правило 60%.</span></li>
+                <li><span class="b-name">Анализ своей загрузки</span><span class="b-time">25 мин</span><span class="b-text">Упражнение «Пожиратели времени»: участники анализируют свои совещания в календаре. Мини-лекция: правила планирования (не более 60%, группировка, слоты на почту и ЕСЭД). Упражнение «Анализ необходимых действий» по «Дереву целей».</span></li>
+                <li><span class="b-name">Рефлексия и ДЗ</span><span class="b-time">10 мин</span><span class="b-text">Домашнее задание: доделать «Дерево целей» для главной цели на квартал, разбив на задачи по месяцам. Прислать тренеру.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 2 -->
+    <div class="panel" data-panel="2">
+      <div class="list">
+        <div class="item">
+          <div class="item-head">
+            <div>
+              <h4><span class="hash">#делегирование #контроль</span><span class="item-title">Практикум №2: «Организация работы контроль»</span></h4>
+            </div>
+            <span class="item-arrow">&#9656;</span>
+          </div>
+          <div class="item-body">
+            <div class="detail-section"><h4>Что будут знать</h4>
+              <ul class="detail-list">
+                <li>Что такое делегирование и почему руководители боятся делегировать.</li>
+                <li>Модель постановки задачи «Принцип Домика»: Кто, Что, Когда, Зачем, Как.</li>
+                <li>Алгоритм делегирования.</li>
+                <li>Типы контроля под разные ситуации.</li>
+              </ul>
+            </div>
+            <div class="detail-section"><h4>Что будут уметь</h4>
+              <ul class="detail-list">
+                <li>Ставить задачи сотрудникам.</li>
+                <li>Делегировать задачу в зависимости от ситуации.</li>
+                <li>Выстраивать систему контроля без гиперопеки.</li>
+              </ul>
+            </div>
+            <div class="detail-section"><h4>Структура практикума (2.5 часа)</h4>
+              <ul class="structure">
+                <li><span class="b-name">Введение</span><span class="b-time">15 мин</span><span class="b-text">Упражнение «Загруженный руководитель» — участники перечисляют задачи, которые отнимают больше всего времени. Тренер подводит к этапам «Организация деятельности» и «Контроль».</span></li>
+                <li><span class="b-name">Постановка задачи</span><span class="b-time">45 мин</span><span class="b-text">Мини-лекция: «Принцип Домика» (Кто, Что, Когда, Зачем, Как). Разбор ошибок и их исправление на реальных примерах.</span></li>
+                <li><span class="b-name">Делегирование</span><span class="b-time">45 мин</span><span class="b-text">Алгоритм делегирования. Участники отрабатывают алгоритм в мини-группах с обратной связью.</span></li>
+                <li><span class="b-name">Контроль</span><span class="b-time">35 мин</span><span class="b-text">Мини-лекция: виды контроля (предварительный, текущий, итоговый) и типы контроля под разные ситуации. Разбор кейсов: участники определяют оптимальный тип контроля для 3–4 ситуаций.</span></li>
+                <li><span class="b-name">Рефлексия и ДЗ</span><span class="b-time">10 мин</span><span class="b-text">Домашнее задание: 1) делегировать одну задачу сотруднику по «Принципу Домика»; 2) оптимизировать календарь — убрать/сократить 2 встречи, добавить слоты на приоритеты.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 3 -->
+    <div class="panel" data-panel="3">
+      <div class="list">
+        <div class="item">
+          <div class="item-head">
+            <div>
+              <h4><span class="hash">#мотивация #обратная связь</span><span class="item-title">Практикум №3: «Мотивация и обратная связь»</span></h4>
+            </div>
+            <span class="item-arrow">&#9656;</span>
+          </div>
+          <div class="item-body">
+            <div class="detail-section"><h4>Что будут знать</h4>
+              <ul class="detail-list">
+                <li>Что такое мотивация, чем отличается от вовлечённости.</li>
+                <li>Базовые драйверы мотивации сотрудников.</li>
+                <li>Что такое конструктивная обратная связь и зачем она нужна.</li>
+                <li>Виды обратной связи: поддерживающая и корректирующая.</li>
+                <li>Общий алгоритм предоставления конструктивной обратной связи.</li>
+              </ul>
+            </div>
+            <div class="detail-section"><h4>Что будут уметь</h4>
+              <ul class="detail-list">
+                <li>Определять возможные драйверы мотивации разных сотрудников.</li>
+                <li>Проводить мотивирующий диалог 1:1 с сотрудником.</li>
+                <li>Давать корректирующую и поддерживающую обратную связь по алгоритму.</li>
+                <li>Принимать обратную связь и работать с ней.</li>
+              </ul>
+            </div>
+            <div class="detail-section"><h4>Структура практикума (2.5 часа)</h4>
+              <ul class="structure">
+                <li><span class="b-name">Введение</span><span class="b-time">15 мин</span><span class="b-text">Упражнение «Лучший босс» — участники делятся примерами, когда похвала или критика руководителя сильно повлияла на работу. Фиксируем критерии, связываем с этапами «Мотивация» и «Обратная связь».</span></li>
+                <li><span class="b-name">Мотивация сотрудников</span><span class="b-time">40 мин</span><span class="b-text">Мини-лекция: что такое мотивация, чем отличается от вовлечённости. Базовые драйверы (признание, интерес, развитие, деньги, автономия). Практика «Карта мотивов»: определить драйверы и способы мотивации для 3–4 сотрудников.</span></li>
+                <li><span class="b-name">Обратная связь: теория и алгоритм</span><span class="b-time">20 мин</span><span class="b-text">Мини-лекция: определение, цели ОС, виды (поддерживающая / корректирующая). Принципы экологичности. Алгоритм ОС:
+                  <ul class="detail-sublist">
+                    <li>Запросить разрешение дать обратную связь.</li>
+                    <li>Описать конкретную ситуацию и действия (факты, без оценок).</li>
+                    <li>Объяснить влияние этих действий на результат, команду, процесс.</li>
+                    <li>Предложить вариант желаемого поведения / совместно найти решение.</li>
+                    <li>Договориться о действиях и зафиксировать.</li>
+                  </ul>
+                  Памятка: каждый участник получает памятку с алгоритмом.</span></li>
+                <li><span class="b-name">Практика: обратная связь по алгоритму</span><span class="b-time">20 мин</span><span class="b-text">Работа в тройках. Участники получают рабочие ситуации, где нужно дать ОС. Двое разыгрывают диалог (руководитель → сотрудник), третий — наблюдатель за алгоритмом. Задача: сформулировать корректирующую и поддерживающую ОС.</span></li>
+                <li><span class="b-name">Практика: мотивирующий диалог 1:1</span><span class="b-time">35 мин</span><span class="b-text">Работа в парах: провести фрагмент мотивирующего диалога 1:1 с сотрудником. Один — руководитель, второй — сотрудник, затем поменяться ролями. Задача: применить знания о драйверах мотивации и выстроить диалог, который вдохновляет и вовлекает. Наблюдатели дают обратную связь по алгоритму.</span></li>
+                <li><span class="b-name">Рефлексия и ДЗ</span><span class="b-time">20 мин</span><span class="b-text">Домашнее задание: 1) провести встречу 1:1 с сотрудником, применив алгоритм ОС и узнав его мотивацию; 2) записать выводы, что получилось, а что улучшить.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 4 -->
+    <div class="panel" data-panel="4">
+      <div class="list">
+        <div class="item">
+          <div class="item-head">
+            <div>
+              <h4><span class="hash">#управленческий цикл</span><span class="item-title">Практикум №4: «Бизнес-симуляция: интеграция всех этапов»</span></h4>
+            </div>
+            <span class="item-arrow">&#9656;</span>
+          </div>
+          <div class="item-body">
+            <div class="detail-section"><h4>Что будут знать</h4>
+              <ul class="detail-list">
+                <li>Как все этапы управленческого цикла связаны в единую систему.</li>
+              </ul>
+            </div>
+            <div class="detail-section"><h4>Что будут уметь</h4>
+              <ul class="detail-list">
+                <li>Интегрировать навыки целеполагания, планирования, делегирования, мотивации, контроля и ОС в единую систему работы.</li>
+                <li>Составлять план работы на месяц и квартал.</li>
+              </ul>
+            </div>
+            <div class="detail-section"><h4>Структура практикума (2.5 часа)</h4>
+              <ul class="structure">
+                <li><span class="b-name">Введение</span><span class="b-time">15 мин</span><span class="b-text">Упражнение «Управленческий ассорти» — участники делятся, какой этап цикла самый сложный и какой инструмент оказался самым полезным. Актуализация знаний.</span></li>
+                <li><span class="b-name">Интеграция навыков: сценарный метод</span><span class="b-time">60 мин</span><span class="b-text">Работа в группах. Каждая получает описание сложной управленческой ситуации из жизни БТИ (горит проект, падает мотивация, нужно перераспределить ресурсы). Задание: пройти все 6 этапов цикла и презентовать решение.</span></li>
+                <li><span class="b-name">Презентация решений и обратная связь</span><span class="b-time">45 мин</span><span class="b-text">Группы презентуют свои решения перед остальными. Тренер и участники дают обратную связь: что было сильным в подходе, какие инструменты были применены удачно, что можно улучшить. Фиксируем лучшие практики.</span></li>
+                <li><span class="b-name">Рефлексия и завершение</span><span class="b-time">15 мин</span><span class="b-text">Шеринг «Что я точно буду делать по-другому?». Сбор обратной связи по треку.</span></li>
+                <li><span class="b-name">Финальное ДЗ</span><span class="b-time">15 мин</span><span class="b-text">Составить и реализовать план действий на месяц с использованием всех инструментов трека. Тренер объясняет задание, участники фиксируют в рабочей тетради.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="block" style="padding-top:0">
+  <div class="wrap">
+    <div class="hw">
+      <div class="hw-badge">Комплексное домашнее задание</div>
+      <h2 class="section-title">Отработка всех навыков на практике</h2>
+      <p class="section-subtitle" style="margin-bottom:22px">Помимо мини-заданий после каждого практикума, участники получают комплексное домашнее задание, которое связывает все 6 этапов управленческого цикла.</p>
+      <div class="hw-grid">
+        <div class="hw-card">
+          <div class="hw-ico">🎯</div>
+          <h4>Цель и план</h4>
+          <p>Поставить задачу SMART и составить план работ на 1–3 месяца.</p>
+        </div>
+        <div class="hw-card">
+          <div class="hw-ico">🤝</div>
+          <h4>Делегирование и контроль</h4>
+          <p>Передать сотруднику задачу, подобрать уровень контроля и зафиксировать протокол.</p>
+        </div>
+        <div class="hw-card">
+          <div class="hw-ico">💡</div>
+          <h4>Мотивация</h4>
+          <p>Провести встречу 1:1, выявить драйверы мотивации сотрудника и применить их в работе.</p>
+        </div>
+        <div class="hw-card">
+          <div class="hw-ico">🔄</div>
+          <h4>Обратная связь</h4>
+          <p>Дать корректирующую и поддерживающую ОС по алгоритму и получить обратную связь от команды.</p>
+        </div>
+        <div class="hw-card">
+          <div class="hw-ico">🗓️</div>
+          <h4>Оптимизация загрузки</h4>
+          <p>Пересобрать календарь под план работы.</p>
+        </div>
+      </div>
+      <p class="hw-foot">Результат домашнего задания будет учитываться при дальнейшем отборе на позицию руководителя в БТИ.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <h2 class="section-title" style="margin-bottom:26px">Готовы выстроить свой управленческий цикл?</h2>
+    <a class="cta" href="#program">Подайте заявку на участие в программе</a>
+    <div class="foot-logo">
+      <img src="Логотип.png" alt="Онлайн-университет Ростелеком" width="153" height="42">
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Переключение практикумов (уровней)
+  document.querySelectorAll('.level-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var lv = btn.getAttribute('data-level');
+      document.querySelectorAll('.level-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+      document.querySelectorAll('.panel').forEach(function(p){
+        p.classList.toggle('active', p.getAttribute('data-panel')===lv);
+      });
+    });
+  });
+  // Раскрытие карточек
+  document.querySelectorAll('.item-head').forEach(function(head){
+    head.addEventListener('click', function(){
+      head.parentElement.classList.toggle('open');
+    });
+  });
+</script>
+</body>
+</html>
