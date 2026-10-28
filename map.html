@@ -1,0 +1,1666 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Дата-подход — карта девяти команд</title>
+<meta name="description" content="Карта финальных проектов девяти дата-команд: девять точек на одной тропе, четыре направления.">
+<style>
+  :root{
+    --paper:#f7f1e3;
+    --paper-2:#efe4cd;
+    --paper-3:#e7d8ba;
+    --ink:#13332d;
+    --ink-2:#4b625b;
+    --teal:#0e4a41;
+    --teal-2:#17695c;
+    --accent:#d9622f;
+    --gold:#a57c2f;
+    --blue:#3f6f7a;
+    --line:rgba(19,51,45,.14);
+    --line-2:rgba(19,51,45,.26);
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --sans:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 620px at 10% -10%, #fffaf0 0%, rgba(255,250,240,0) 62%),
+      radial-gradient(900px 520px at 100% 0%, #f3e7ce 0%, rgba(243,231,206,0) 58%),
+      var(--paper);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+    opacity:.035;
+    mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  }
+  body.is-locked{overflow:hidden}
+  button{font:inherit;color:inherit}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  ::selection{background:rgba(217,98,47,.22)}
+
+  .wrap{
+    position:relative;
+    z-index:2;
+    max-width:1240px;
+    margin:0 auto;
+    padding:0 clamp(18px,4vw,48px);
+  }
+  .sr-only{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+  }
+
+  /* ── top bar ─────────────────────────────────────────── */
+  .topbar{
+    display:flex;
+    align-items:center;
+    gap:24px;
+    flex-wrap:wrap;
+    padding:22px 0 18px;
+    border-bottom:1px solid var(--line);
+  }
+  .brand{display:flex;align-items:center;gap:12px;min-width:0}
+  .brand-mark{
+    width:40px;height:40px;flex:0 0 auto;
+    border:1px solid var(--line-2);
+    border-radius:50%;
+    background:
+      radial-gradient(circle at 34% 28%, #fdf8ec, #eadfc7);
+    display:grid;place-items:center;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.8), 0 3px 10px -6px rgba(19,51,45,.5);
+  }
+  .brand-mark svg{width:22px;height:22px;display:block}
+  .brand-title{
+    font-family:var(--serif);
+    font-size:20px;
+    letter-spacing:-.01em;
+    line-height:1.05;
+  }
+  .brand-sub{
+    display:block;
+    margin-top:3px;
+    font-size:10px;
+    letter-spacing:.17em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+  }
+
+  .legend{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:wrap;
+  }
+  .chip{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:7px 11px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:rgba(255,255,255,.25);
+    font-size:12px;
+    line-height:1;
+    color:var(--ink-2);
+    cursor:pointer;
+    transition:background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .chip:hover{border-color:var(--line-2);color:var(--ink);transform:translateY(-1px)}
+  .chip.is-active{
+    background:var(--ink);
+    border-color:var(--ink);
+    color:var(--paper);
+  }
+  .chip .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 0 3px rgba(165,124,47,.14);
+  }
+  .chip .dot--finance{background:var(--teal);box-shadow:0 0 0 3px rgba(14,74,65,.14)}
+  .chip .dot--medicine{background:var(--accent);box-shadow:0 0 0 3px rgba(217,98,47,.16)}
+  .chip .dot--oil{background:var(--gold);box-shadow:0 0 0 3px rgba(165,124,47,.16)}
+  .chip .dot--telecom{background:var(--blue);box-shadow:0 0 0 3px rgba(63,111,122,.16)}
+  .chip-count{
+    min-width:17px;
+    padding:3px 5px;
+    border-radius:999px;
+    background:rgba(19,51,45,.08);
+    font-size:10px;
+    font-variant-numeric:tabular-nums;
+    text-align:center;
+  }
+  .chip.is-active .chip-count{background:rgba(247,241,227,.16)}
+
+  /* ── hero ────────────────────────────────────────────── */
+  .hero{
+    display:grid;
+    grid-template-columns:minmax(0,1.35fr) minmax(250px,.65fr);
+    gap:clamp(26px,4vw,64px);
+    align-items:end;
+    padding:clamp(30px,5vw,58px) 0 clamp(26px,4vw,44px);
+  }
+  .eyebrow{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:0;
+    font-size:10.5px;
+    letter-spacing:.19em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+  }
+  .eyebrow::before{
+    content:"";
+    width:30px;height:1px;
+    background:var(--line-2);
+  }
+  h1{
+    margin:16px 0 18px;
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:clamp(42px,6.2vw,84px);
+    line-height:.98;
+    letter-spacing:-.035em;
+  }
+  h1 em{
+    font-style:italic;
+    color:var(--accent);
+    letter-spacing:-.02em;
+  }
+  .lede{
+    max-width:56ch;
+    margin:0;
+    font-size:15.5px;
+    line-height:1.65;
+    color:var(--ink-2);
+  }
+
+  .hero-side{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    border-left:1px solid var(--line);
+    padding-left:clamp(18px,2.6vw,32px);
+  }
+  .stats{
+    display:flex;
+    gap:clamp(16px,2.4vw,28px);
+    flex-wrap:wrap;
+  }
+  .stat-num{
+    display:block;
+    font-family:var(--serif);
+    font-size:36px;
+    line-height:1;
+    font-variant-numeric:tabular-nums;
+    letter-spacing:-.03em;
+  }
+  .stat-label{
+    display:block;
+    margin-top:5px;
+    font-size:10px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+  }
+  .progress-label{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:8px;
+    font-size:10.5px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+  }
+  .domain-bar{
+    display:flex;
+    gap:2px;
+    height:6px;
+    border-radius:99px;
+    overflow:hidden;
+    background:rgba(19,51,45,.08);
+  }
+  .domain-bar i{
+    display:block;
+    height:100%;
+    min-width:4px;
+    border-radius:2px;
+  }
+  .hero-note{
+    margin:0;
+    font-size:12.5px;
+    line-height:1.6;
+    color:var(--ink-2);
+  }
+  .hero-note strong{color:var(--ink);font-weight:600}
+
+  /* ── map card ────────────────────────────────────────── */
+  .map-card{
+    position:relative;
+    border:1px solid var(--line-2);
+    border-radius:26px;
+    background:var(--paper-2);
+    overflow:hidden;
+    box-shadow:
+      0 34px 80px -56px rgba(19,51,45,.6),
+      0 2px 0 rgba(255,255,255,.6) inset;
+  }
+
+  .map{
+    position:relative;
+    aspect-ratio:1200 / 760;
+    background:
+      radial-gradient(120% 100% at 12% 0%, #fcf7ec 0%, rgba(252,247,236,0) 58%),
+      radial-gradient(100% 90% at 100% 100%, #efe0c3 0%, rgba(239,224,195,0) 62%),
+      var(--paper);
+    isolation:isolate;
+  }
+  .map::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    opacity:.55;
+    background-image:radial-gradient(circle at 1px 1px, rgba(19,51,45,.16) 1px, transparent 0);
+    background-size:26px 26px;
+  }
+  .map::after{
+    content:"";
+    position:absolute;
+    inset:12px;
+    z-index:4;
+    border:1px solid rgba(19,51,45,.1);
+    border-radius:16px;
+    pointer-events:none;
+  }
+
+  .terrain,.trail{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    width:100%;
+    height:100%;
+    overflow:visible;
+    pointer-events:none;
+  }
+  .trail{z-index:2}
+
+  .trail-shadow{
+    fill:none;
+    stroke:var(--teal);
+    stroke-opacity:.07;
+    stroke-width:16;
+    stroke-linecap:round;
+  }
+  .trail-base{
+    fill:none;
+    stroke:var(--teal);
+    stroke-opacity:.5;
+    stroke-width:2.4;
+    stroke-linecap:round;
+    stroke-dasharray:1 10;
+    animation:marching 34s linear infinite;
+  }
+  .trekker{fill:var(--accent);filter:drop-shadow(0 0 6px rgba(217,98,47,.55))}
+  @keyframes marching{to{stroke-dashoffset:-220}}
+
+  .map-plate{
+    position:absolute;
+    top:24px;left:26px;
+    z-index:3;
+    padding:10px 15px 11px;
+    border:1px solid rgba(19,51,45,.18);
+    border-radius:12px;
+    background:rgba(247,241,227,.78);
+    backdrop-filter:blur(5px);
+    box-shadow:0 8px 24px -20px rgba(19,51,45,.7);
+    pointer-events:none;
+  }
+  .plate-kicker{
+    display:block;
+    font-size:9px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    margin-bottom:3px;
+  }
+  .plate-title{
+    display:block;
+    font-family:var(--serif);
+    font-size:16px;
+    letter-spacing:-.01em;
+    white-space:nowrap;
+  }
+
+  .compass{
+    position:absolute;
+    top:18px;right:22px;
+    z-index:3;
+    width:64px;height:64px;
+    opacity:.85;
+    pointer-events:none;
+  }
+
+  .map-scale{
+    position:absolute;
+    left:26px;bottom:22px;
+    z-index:3;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:9.5px;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    pointer-events:none;
+  }
+  .scale-bar{
+    display:flex;
+    gap:0;
+    border:1px solid var(--line-2);
+    border-radius:2px;
+    overflow:hidden;
+  }
+  .scale-bar i{display:block;width:18px;height:7px}
+  .scale-bar i:nth-child(odd){background:rgba(19,51,45,.55)}
+  .scale-bar i:nth-child(even){background:rgba(247,241,227,.7)}
+
+  /* ── map nodes ───────────────────────────────────────── */
+  .nodes{position:absolute;inset:0;z-index:5}
+
+  .node{
+    position:absolute;
+    width:46px;height:46px;
+    padding:0;
+    border:0;
+    background:none;
+    transform:translate(-50%,-50%);
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    animation:nodeIn .55s cubic-bezier(.2,.8,.2,1) both;
+  }
+  @keyframes nodeIn{
+    from{opacity:0;transform:translate(-50%,-50%) scale(.55)}
+    to{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  }
+  .node-dot{
+    position:absolute;
+    inset:5px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    font-size:12px;
+    font-weight:650;
+    font-variant-numeric:tabular-nums;
+    letter-spacing:.02em;
+    color:#fffaf0;
+    border:1.5px solid transparent;
+    transition:transform .22s cubic-bezier(.2,.8,.2,1), box-shadow .22s ease;
+  }
+  .node[data-domain="finance"] .node-dot{
+    background:var(--teal);
+    box-shadow:0 6px 14px -8px rgba(14,74,65,.9), inset 0 1px 0 rgba(255,255,255,.18);
+  }
+  .node[data-domain="medicine"] .node-dot{
+    background:var(--accent);
+    box-shadow:0 7px 16px -7px rgba(217,98,47,.85);
+  }
+  .node[data-domain="oil"] .node-dot{
+    background:var(--gold);
+    box-shadow:0 7px 16px -7px rgba(165,124,47,.85);
+  }
+  .node[data-domain="telecom"] .node-dot{
+    background:var(--blue);
+    box-shadow:0 7px 16px -7px rgba(63,111,122,.85);
+  }
+  .node:hover,
+  .node:focus-visible{z-index:10}
+  .node:hover .node-dot,
+  .node:focus-visible .node-dot{transform:scale(1.1)}
+
+  .node-label{
+    position:absolute;
+    top:50%;
+    left:38px;
+    transform:translateY(-50%);
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+    padding:7px 11px 8px;
+    border:1px solid rgba(19,51,45,.16);
+    border-radius:10px;
+    background:rgba(250,245,234,.9);
+    box-shadow:0 10px 24px -22px rgba(19,51,45,.8);
+    text-align:left;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:background .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .node-label--left{
+    left:auto;
+    right:38px;
+    text-align:right;
+    align-items:flex-end;
+  }
+  .node:hover .node-label,
+  .node:focus-visible .node-label{
+    background:#fffaf0;
+    border-color:rgba(19,51,45,.3);
+    transform:translateY(-50%) translateY(-1px);
+  }
+  .node-name{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    font-weight:650;
+    line-height:1.1;
+    color:var(--ink);
+  }
+  .node-label--left .node-name{flex-direction:row-reverse}
+  .node-dot-mini{
+    width:5px;height:5px;border-radius:50%;flex:0 0 auto;
+  }
+  .node-role{
+    font-size:9px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+  }
+  .node.is-dim{opacity:.18;pointer-events:none}
+  .node, .trail-item{transition:opacity .25s ease}
+
+  .map-foot{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    flex-wrap:wrap;
+    padding:14px 22px;
+    border-top:1px solid var(--line);
+    background:rgba(247,241,227,.55);
+    font-size:11.5px;
+    color:var(--ink-2);
+  }
+  .map-foot span{display:inline-flex;align-items:center;gap:8px}
+  .map-foot .hint-dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 0 3px rgba(217,98,47,.14);
+  }
+
+  /* ── mobile trail ────────────────────────────────────── */
+  .trail-mobile{display:none;padding:24px 20px 28px}
+  .trail-mobile-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .trail-mobile-head h2{
+    margin:0;
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:24px;
+    letter-spacing:-.02em;
+  }
+  .trail-mobile-head span{font-size:11px;color:var(--ink-2)}
+  .trail-list{
+    position:relative;
+    list-style:none;
+    margin:20px 0 0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+  .trail-list::before{
+    content:"";
+    position:absolute;
+    left:23px;
+    top:30px;
+    bottom:30px;
+    border-left:2px dashed rgba(19,51,45,.24);
+  }
+  .trail-item{
+    position:relative;
+    width:100%;
+    display:grid;
+    grid-template-columns:46px minmax(0,1fr) 18px;
+    align-items:center;
+    gap:14px;
+    padding:9px 10px 9px 0;
+    border:1px solid transparent;
+    border-radius:16px;
+    background:none;
+    text-align:left;
+    cursor:pointer;
+    transition:background .2s ease, border-color .2s ease;
+  }
+  .trail-item:hover{background:rgba(255,255,255,.45);border-color:var(--line)}
+  .trail-node{
+    position:relative;
+    z-index:1;
+    width:46px;height:46px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    font-size:11.5px;
+    font-weight:650;
+    font-variant-numeric:tabular-nums;
+    color:#fffaf0;
+  }
+  .trail-item[data-domain="finance"] .trail-node{background:var(--teal)}
+  .trail-item[data-domain="medicine"] .trail-node{background:var(--accent)}
+  .trail-item[data-domain="oil"] .trail-node{background:var(--gold)}
+  .trail-item[data-domain="telecom"] .trail-node{background:var(--blue)}
+  .trail-body{min-width:0}
+  .trail-name-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .trail-name{font-size:15px;font-weight:650;letter-spacing:-.01em}
+  .trail-chip{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:9px;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--ink-2);
+  }
+  .trail-chip::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--gold)}
+  .trail-item[data-domain="finance"] .trail-chip::before{background:var(--teal)}
+  .trail-item[data-domain="medicine"] .trail-chip::before{background:var(--accent)}
+  .trail-item[data-domain="oil"] .trail-chip::before{background:var(--gold)}
+  .trail-item[data-domain="telecom"] .trail-chip::before{background:var(--blue)}
+  .trail-role{display:block;margin-top:3px;font-size:11.5px;color:var(--ink-2)}
+  .trail-arrow{width:16px;height:16px;color:var(--ink-2);opacity:.5}
+  .trail-item.is-dim{opacity:.25;pointer-events:none}
+
+  /* ── footer ──────────────────────────────────────────── */
+  .foot{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-top:34px;
+    padding:22px 0 36px;
+    border-top:1px solid var(--line);
+    font-size:10.5px;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+  }
+  .foot-brand{display:flex;align-items:center;gap:9px}
+  .foot-brand svg{width:15px;height:15px;opacity:.7}
+
+  /* ── scrim + panel ───────────────────────────────────── */
+  .scrim{
+    position:fixed;
+    inset:0;
+    z-index:70;
+    background:rgba(10,34,29,.42);
+    backdrop-filter:blur(3px);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .4s ease, visibility 0s linear .4s;
+  }
+  .scrim.is-open{opacity:1;visibility:visible;transition:opacity .4s ease, visibility 0s}
+
+  .panel{
+    position:fixed;
+    top:0;right:0;
+    z-index:80;
+    display:flex;
+    flex-direction:column;
+    width:min(446px,100%);
+    height:100vh;
+    height:100dvh;
+    background:var(--paper);
+    box-shadow:-40px 0 90px -50px rgba(10,34,29,.8);
+    transform:translateX(103%);
+    visibility:hidden;
+    transition:transform .5s cubic-bezier(.2,.8,.2,1), visibility 0s linear .5s;
+    overscroll-behavior:contain;
+  }
+  .panel.is-open{
+    transform:none;
+    visibility:visible;
+    transition:transform .5s cubic-bezier(.2,.8,.2,1), visibility 0s;
+  }
+
+  .panel-top{
+    position:relative;
+    flex:0 0 auto;
+    padding:22px 26px 26px;
+    color:#f7f1e3;
+    overflow:hidden;
+    background:linear-gradient(150deg,#12594e,#0b3a33);
+  }
+  .panel[data-domain="medicine"] .panel-top{background:linear-gradient(150deg,#e0713f,#a83f1a)}
+  .panel[data-domain="oil"] .panel-top{background:linear-gradient(150deg,#a57c2f,#6a4f1c)}
+  .panel[data-domain="telecom"] .panel-top{background:linear-gradient(150deg,#4a7d89,#274f59)}
+  .panel-top-row{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+  }
+  .panel-point{
+    font-size:9.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    opacity:.78;
+  }
+  .panel-close{
+    flex:0 0 auto;
+    width:34px;height:34px;
+    display:grid;place-items:center;
+    padding:0;
+    border:1px solid rgba(247,241,227,.32);
+    border-radius:50%;
+    background:rgba(247,241,227,.06);
+    color:#f7f1e3;
+    cursor:pointer;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .panel-close:hover{background:rgba(247,241,227,.16);transform:rotate(90deg)}
+  .panel-close:focus-visible{outline-color:#f7f1e3}
+  .panel-close svg{width:13px;height:13px}
+  .panel-num{
+    position:absolute;
+    top:-16px;right:60px;
+    font-family:var(--serif);
+    font-size:138px;
+    line-height:1;
+    letter-spacing:-.06em;
+    opacity:.09;
+    pointer-events:none;
+    font-variant-numeric:tabular-nums;
+  }
+  .panel-title{
+    position:relative;
+    z-index:2;
+    margin:26px 0 4px;
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:40px;
+    line-height:1;
+    letter-spacing:-.02em;
+  }
+  .panel-title.is-long{font-size:33px;line-height:1.04}
+  .panel-role{
+    position:relative;
+    z-index:2;
+    margin:0;
+    font-size:10.5px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    opacity:.82;
+    max-width:92%;
+  }
+  .panel-chip{
+    position:relative;
+    z-index:2;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    margin-top:18px;
+    padding:6px 10px;
+    border:1px solid rgba(247,241,227,.28);
+    border-radius:999px;
+    font-size:10px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    background:rgba(247,241,227,.08);
+  }
+  .panel-chip::before{
+    content:"";
+    width:6px;height:6px;border-radius:50%;
+    background:#cbe0d7;
+  }
+  .panel[data-domain="medicine"] .panel-chip::before{background:#ffd2bf}
+  .panel[data-domain="oil"] .panel-chip::before{background:#f2dc9e}
+  .panel[data-domain="telecom"] .panel-chip::before{background:#c2e0e5}
+
+  .panel-scroll{
+    flex:1 1 auto;
+    overflow-y:auto;
+    padding:26px 26px 30px;
+    overscroll-behavior:contain;
+  }
+  .panel-desc{
+    margin:0 0 24px;
+    font-size:14px;
+    line-height:1.68;
+    color:var(--ink-2);
+  }
+  .meta{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin:0 0 26px;
+  }
+  .meta > div{
+    padding:11px 12px 12px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:rgba(255,255,255,.32);
+  }
+  .meta dt{
+    margin-bottom:5px;
+    font-size:9px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+  }
+  .meta dd{
+    margin:0;
+    font-size:13px;
+    font-weight:600;
+    line-height:1.35;
+  }
+  .panel-section-title{
+    margin:0 0 10px;
+    font-size:9.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+  }
+  .tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:26px;
+  }
+  .tag{
+    padding:5px 9px;
+    border-radius:7px;
+    background:rgba(14,74,65,.07);
+    border:1px solid rgba(14,74,65,.1);
+    font-size:11px;
+    color:var(--teal);
+  }
+  .roster{margin:0 0 26px}
+  .roster ul{
+    list-style:none;
+    margin:0;
+    padding:0;
+    border-top:1px solid var(--line);
+  }
+  .roster li{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:16px;
+    padding:8px 0;
+    border-bottom:1px solid var(--line);
+    font-size:12.5px;
+    line-height:1.45;
+  }
+  .roster .member-name{font-weight:600;color:var(--ink)}
+  .roster .member-role{
+    color:var(--ink-2);
+    font-size:10.5px;
+    text-align:right;
+    max-width:58%;
+  }
+  .motto{
+    margin:0 0 26px;
+    padding:2px 0 2px 16px;
+    border-left:2px solid var(--accent);
+    font-family:var(--serif);
+    font-size:17px;
+    font-style:italic;
+    line-height:1.45;
+    color:var(--ink);
+  }
+  .result{
+    margin-top:22px;
+    padding-top:22px;
+    border-top:1px solid var(--line);
+  }
+  .result ul{
+    margin:0;
+    padding:0;
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+  }
+  .result li{
+    position:relative;
+    padding-left:20px;
+    font-size:12.5px;
+    line-height:1.5;
+    color:var(--ink-2);
+  }
+  .result li::before{
+    content:"";
+    position:absolute;
+    left:2px;top:.55em;
+    width:9px;height:5px;
+    border-left:1.5px solid var(--teal);
+    border-bottom:1.5px solid var(--teal);
+    transform:rotate(-45deg);
+  }
+  .culture{
+    margin:0;
+    font-size:12.5px;
+    line-height:1.6;
+    color:var(--ink-2);
+  }
+
+  .panel-foot{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:13px 18px;
+    border-top:1px solid var(--line);
+    background:rgba(239,228,205,.6);
+  }
+  .nav-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:9px 12px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:rgba(255,255,255,.35);
+    font-size:11.5px;
+    color:var(--ink-2);
+    cursor:pointer;
+    transition:background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .nav-btn:hover{background:#fffaf0;color:var(--ink);border-color:var(--line-2)}
+  .panel-counter{
+    font-size:10px;
+    letter-spacing:.14em;
+    color:var(--ink-2);
+    font-variant-numeric:tabular-nums;
+  }
+
+  /* ── adaptive ────────────────────────────────────────── */
+  @media (max-width:1040px){
+    .map-block{display:none}
+    .trail-mobile{display:block}
+    .map-card{border-radius:22px}
+  }
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr;align-items:start}
+    .hero-side{
+      border-left:0;
+      border-top:1px solid var(--line);
+      padding-left:0;
+      padding-top:20px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      align-items:start;
+      gap:20px 30px;
+    }
+    .hero-note{grid-column:1 / -1}
+  }
+  @media (max-width:640px){
+    .topbar{gap:14px}
+    .brand-sub{display:none}
+    .legend{width:100%;margin-left:0;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px;scrollbar-width:none}
+    .legend::-webkit-scrollbar{display:none}
+    .chip{flex:0 0 auto}
+    .hero-side{grid-template-columns:1fr;gap:16px}
+    .hero-note{grid-column:auto}
+    h1{font-size:clamp(38px,11vw,56px)}
+    .map-foot{font-size:10.5px}
+    .panel{
+      top:auto;
+      bottom:0;
+      width:100%;
+      height:min(92dvh,780px);
+      border-radius:22px 22px 0 0;
+      transform:translateY(103%);
+    }
+    .panel.is-open{transform:none}
+    .panel-title{font-size:34px}
+    .panel-title.is-long{font-size:29px}
+    .panel-top{padding:18px 20px 22px}
+    .panel-scroll{padding:22px 20px 26px}
+    .panel-num{font-size:112px;right:52px;top:-10px}
+    .panel-foot{padding:11px 14px calc(11px + env(safe-area-inset-bottom))}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{
+      animation-duration:.001ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.001ms !important;
+    }
+    .trail-base{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="9" stroke="#0e4a41" stroke-opacity=".35"/>
+          <path d="M12 3.5 14.2 12 12 20.5 9.8 12 12 3.5Z" fill="#0e4a41" fill-opacity=".8"/>
+          <path d="M12 3.5 14.2 12H12V3.5Z" fill="#d9622f"/>
+          <circle cx="12" cy="12" r="1.4" fill="#f7f1e3"/>
+        </svg>
+      </span>
+      <span class="brand-text">
+        <span class="brand-title">Дата-подход</span>
+        <span class="brand-sub">карта команд · октябрь 2026</span>
+      </span>
+    </div>
+
+    <nav class="legend" aria-label="Фильтр команд по направлению">
+      <button class="chip is-active" type="button" data-filter="all" aria-pressed="true">Все<span class="chip-count" data-count="all">9</span></button>
+      <button class="chip" type="button" data-filter="finance" aria-pressed="false"><i class="dot dot--finance" aria-hidden="true"></i>Банк и финтех<span class="chip-count" data-count="finance">3</span></button>
+      <button class="chip" type="button" data-filter="medicine" aria-pressed="false"><i class="dot dot--medicine" aria-hidden="true"></i>Медицина<span class="chip-count" data-count="medicine">2</span></button>
+      <button class="chip" type="button" data-filter="oil" aria-pressed="false"><i class="dot dot--oil" aria-hidden="true"></i>Нефтегаз<span class="chip-count" data-count="oil">2</span></button>
+      <button class="chip" type="button" data-filter="telecom" aria-pressed="false"><i class="dot dot--telecom" aria-hidden="true"></i>Телеком и реклама<span class="chip-count" data-count="telecom">2</span></button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="pageTitle">
+      <div class="hero-copy">
+        <p class="eyebrow">Дата-подход · октябрь 2026</p>
+        <h1 id="pageTitle">Девять команд.<br><em>Одна тропа.</em></h1>
+        <p class="lede">
+          Карта собрана по финальным презентациям девяти команд интенсива
+          «Дата-подход в бизнесе». Нажмите на точку, чтобы открыть карточку команды
+          и её проект.
+        </p>
+      </div>
+
+      <aside class="hero-side" aria-label="Сводка по карте">
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-num">9</span>
+            <span class="stat-label">команд</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">4</span>
+            <span class="stat-label">направления</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">9</span>
+            <span class="stat-label">проектов</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="progress-label">
+            <span>Состав карты</span>
+            <span>9 команд</span>
+          </div>
+          <div class="domain-bar" id="domainBar" role="img" aria-label="Распределение команд по направлениям"></div>
+        </div>
+
+        <p class="hero-note" id="heroNote">
+          Банк и финтех — <strong>3</strong>, медицина — <strong>2</strong>,
+          нефтегаз — <strong>2</strong>, телеком и реклама — <strong>2</strong>.
+        </p>
+      </aside>
+    </section>
+
+    <section class="map-card" aria-labelledby="mapTitle">
+      <h2 id="mapTitle" class="sr-only">Карта девяти команд</h2>
+
+      <div class="map-block">
+        <div class="map" id="map">
+          <svg class="terrain" viewBox="0 0 1200 760" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+            <g fill="none" stroke="#13332d" stroke-opacity=".11" stroke-width="1.1">
+              <path d="M-60 120 C120 60 220 200 380 150 S640 20 820 80 S1080 190 1260 110"/>
+              <path d="M-60 168 C120 108 230 245 390 195 S650 70 830 130 S1090 240 1260 160"/>
+              <path d="M-60 560 C120 500 260 630 430 580 S720 450 900 520 S1130 640 1260 580"/>
+              <path d="M-60 612 C130 552 270 682 440 632 S730 502 910 572 S1140 692 1260 632"/>
+              <path d="M-60 664 C140 604 280 734 450 684 S740 554 920 624 S1150 744 1260 684"/>
+              <ellipse cx="252" cy="300" rx="92" ry="54" transform="rotate(-18 252 300)"/>
+              <ellipse cx="252" cy="300" rx="60" ry="34" transform="rotate(-18 252 300)"/>
+              <ellipse cx="252" cy="300" rx="28" ry="16" transform="rotate(-18 252 300)"/>
+              <ellipse cx="1005" cy="522" rx="112" ry="62" transform="rotate(12 1005 522)"/>
+              <ellipse cx="1005" cy="522" rx="74" ry="40" transform="rotate(12 1005 522)"/>
+              <ellipse cx="1005" cy="522" rx="38" ry="20" transform="rotate(12 1005 522)"/>
+            </g>
+            <g fill="none" stroke="#0e4a41" stroke-opacity=".26" stroke-width="1.2" stroke-linejoin="round">
+              <path d="M952 678 962 660 972 678Z"/>
+              <path d="M972 684 982 666 992 684Z"/>
+              <path d="M933 690 943 674 953 690Z"/>
+              <path d="M995 672 1005 654 1015 672Z"/>
+              <path d="M1013 690 1023 672 1033 690Z"/>
+            </g>
+            <g fill="#0e4a41" fill-opacity=".07">
+              <circle cx="160" cy="120" r="2"/>
+              <circle cx="186" cy="146" r="1.5"/>
+              <circle cx="142" cy="154" r="1.5"/>
+              <circle cx="1090" cy="620" r="2"/>
+              <circle cx="1120" cy="648" r="1.5"/>
+              <circle cx="1064" cy="654" r="1.5"/>
+            </g>
+          </svg>
+
+          <svg class="trail" viewBox="0 0 1200 760" aria-hidden="true">
+            <path class="trail-shadow" id="trailShadow" d=""/>
+            <path class="trail-base" id="trailBase" d=""/>
+            <circle class="trekker" id="trekker" r="3.5" cx="130" cy="650">
+              <animateMotion dur="30s" repeatCount="indefinite" rotate="auto">
+                <mpath href="#trailBase"/>
+              </animateMotion>
+            </circle>
+          </svg>
+
+          <div class="nodes" id="nodes"></div>
+
+          <div class="map-plate" aria-hidden="true">
+            <span class="plate-kicker">Финальные проекты · октябрь 2026</span>
+            <span class="plate-title">Тропа девяти команд</span>
+          </div>
+
+          <svg class="compass" viewBox="0 0 80 80" aria-hidden="true">
+            <circle cx="40" cy="41" r="27" fill="rgba(247,241,227,.66)" stroke="rgba(19,51,45,.24)"/>
+            <circle cx="40" cy="41" r="20" fill="none" stroke="rgba(19,51,45,.16)" stroke-dasharray="1 4"/>
+            <path d="M40 15 46 41 40 67 34 41Z" fill="#0e4a41" fill-opacity=".72"/>
+            <path d="M40 15 46 41H40Z" fill="#d9622f"/>
+            <circle cx="40" cy="41" r="2" fill="#f7f1e3"/>
+            <text x="40" y="10" text-anchor="middle" font-family="Georgia,serif" font-size="8.5" letter-spacing="1" fill="#13332d" fill-opacity=".65">N</text>
+          </svg>
+
+          <div class="map-scale" aria-hidden="true">
+            <span class="scale-bar"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+            <span>1 точка = 1 команда</span>
+          </div>
+        </div>
+
+        <div class="map-foot">
+          <span><i class="hint-dot" aria-hidden="true"></i>Нажмите на точку — откроется карточка команды</span>
+          <span>9 команд · 4 направления · 9 проектов</span>
+        </div>
+      </div>
+
+      <div class="trail-mobile" id="trailMobile">
+        <div class="trail-mobile-head">
+          <h2>Тропа команд</h2>
+          <span>9 точек · нажмите, чтобы открыть</span>
+        </div>
+        <ol class="trail-list" id="trailList"></ol>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span class="foot-brand">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-opacity=".4"/>
+        <path d="M12 3.5 14.2 12 12 20.5 9.8 12 12 3.5Z" fill="currentColor" fill-opacity=".7"/>
+      </svg>
+      Дата-подход · финальные проекты
+    </span>
+    <span>Октябрь 2026</span>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim" aria-hidden="true"></div>
+
+<aside class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="panelTitle" aria-describedby="panelDesc" data-domain="medicine">
+  <div class="panel-top">
+    <div class="panel-top-row">
+      <span class="panel-point" id="panelPoint">Команда №1 · точка 01 / 09</span>
+      <button class="panel-close" id="panelClose" type="button" aria-label="Закрыть карточку">
+        <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M1 1l12 12M13 1 1 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <span class="panel-num" id="panelNum" aria-hidden="true">01</span>
+    <h2 class="panel-title" id="panelTitle">Пинг до просветления</h2>
+    <p class="panel-role" id="panelRole">Среднее время приёма по направлениям</p>
+    <span class="panel-chip" id="panelDomain">Медицина</span>
+  </div>
+
+  <div class="panel-scroll">
+    <p class="panel-desc" id="panelDesc"></p>
+
+    <dl class="meta">
+      <div>
+        <dt>Лидер</dt>
+        <dd id="metaLead">—</dd>
+      </div>
+      <div>
+        <dt>В команде</dt>
+        <dd id="metaMembers">—</dd>
+      </div>
+      <div>
+        <dt>Направление</dt>
+        <dd id="metaDomain">—</dd>
+      </div>
+      <div>
+        <dt>Точка маршрута</dt>
+        <dd id="metaPoint">—</dd>
+      </div>
+    </dl>
+
+    <p class="panel-section-title">Зона ответственности</p>
+    <div class="tags" id="panelTags"></div>
+
+    <section class="roster" id="rosterBlock">
+      <p class="panel-section-title">Состав команды</p>
+      <ul id="panelRoster"></ul>
+    </section>
+
+    <p class="panel-section-title">Главный вывод</p>
+    <blockquote class="motto" id="panelMotto"></blockquote>
+
+    <div class="result">
+      <p class="panel-section-title">Что получилось</p>
+      <ul id="panelResult"></ul>
+    </div>
+
+    <div class="result">
+      <p class="panel-section-title">Культура данных</p>
+      <p class="culture" id="panelCulture"></p>
+    </div>
+  </div>
+
+  <div class="panel-foot">
+    <button class="nav-btn" id="prevBtn" type="button" aria-label="Предыдущая команда">← Назад</button>
+    <span class="panel-counter" id="panelCounter">01 / 09</span>
+    <button class="nav-btn" id="nextBtn" type="button" aria-label="Следующая команда">Вперёд →</button>
+  </div>
+</aside>
+
+<noscript>
+  <p style="max-width:640px;margin:0 auto 40px;padding:0 20px;font-size:14px;color:#4b625b">
+    Для интерактивной карты включите JavaScript. На карте — девять финальных проектов:
+    «Пинг до просветления», «Цифровые слоники», «Фиксики», «Ползущие к мудрости»,
+    «БигДата Банда», «Метрика Успеха», «Сборная солянка», «Команда 8» и «Сила Востока».
+  </p>
+</noscript>
+
+<script>
+(function () {
+  'use strict';
+
+  const W = 1200;
+  const H = 760;
+
+  const points = [
+    { x: 130,  y: 650 },
+    { x: 270,  y: 570 },
+    { x: 415,  y: 620 },
+    { x: 555,  y: 535 },
+    { x: 485,  y: 395 },
+    { x: 635,  y: 300 },
+    { x: 790,  y: 350 },
+    { x: 905,  y: 225 },
+    { x: 1045, y: 150 }
+  ];
+
+  const labelSides = ['right', 'left', 'right', 'right', 'left', 'right', 'right', 'left', 'left'];
+
+  const domains = {
+    finance:  { label: 'Банк и финтех',    color: '#0e4a41' },
+    medicine: { label: 'Медицина',         color: '#d9622f' },
+    oil:      { label: 'Нефтегаз',         color: '#a57c2f' },
+    telecom:  { label: 'Телеком и реклама', color: '#3f6f7a' }
+  };
+  const domainOrder = ['finance', 'medicine', 'oil', 'telecom'];
+
+  const teams = [
+    {
+      id: 1, num: 1, name: 'Пинг до просветления', domain: 'medicine',
+      project: 'Время приёма врачей',
+      projectFull: 'Среднее время приёма по направлениям',
+      lead: 'не указан',
+      roster: [
+        { name: 'Булгакова Влада', role: '' },
+        { name: 'Приходченко Миласлава', role: '' },
+        { name: 'Кильдюшкин Олег', role: '' },
+        { name: 'Епифанова Юля', role: '' },
+        { name: 'Яковлева Надежда', role: '' }
+      ],
+      desc: 'Команда разобрала среднее время приёма по врачебным направлениям и часовые паттерны нагрузки. Дашборд помогает формировать окна расписания врачей и считать коэффициент производительности специалиста.',
+      tags: ['Медицина', 'SQL', 'Дашборды', 'AI-ассистенты'],
+      takeaway: 'Главный инсайт: всё можно сделать за минуты.',
+      results: [
+        'Дашборд среднего времени приёма по направлениям',
+        'Анализ дневной динамики и часовых паттернов',
+        'Рекомендации по окнам расписания врачей'
+      ],
+      culture: 'Вайб-кодинг, AI-ассистенты вместо формальных дашбордов и обучение промпт-инжинирингу.'
+    },
+    {
+      id: 2, num: 4, name: 'Цифровые слоники', domain: 'medicine',
+      project: 'Загрузка врачей',
+      projectFull: 'Загрузка врачей, тарифы и качество данных',
+      lead: 'Татьяна Карсанина (и.о.)',
+      roster: [
+        { name: 'Татьяна Карсанина', role: 'и.о. тимлидера, EDA-аналитик' },
+        { name: 'Елизавета Ситолик', role: 'тимлидер' },
+        { name: 'Наталья Азарова', role: 'BI- и отчётный аналитик' },
+        { name: 'Марина Мурзина', role: 'бизнес-аналитик' },
+        { name: 'Сергей Елисеев', role: 'управление данными' }
+      ],
+      desc: 'Команда исследовала медицинские визиты: загрузку врачей по часам, рентабельность направлений и сегменты пациентов. Отдельный блок — аудит качества данных: почти 20% записей оказались проблемными.',
+      tags: ['Медицина', 'EDA', 'Качество данных', 'BI'],
+      takeaway: 'Не суши цифры — данные должны быть обеспечены логикой восприятия.',
+      results: [
+        'Анализ загрузки врачей по специальностям и часам',
+        'Аудит данных: 1 314 несоответствий возраста, 267 — пола',
+        'Рекомендации по расписанию, тарифам и сегментации'
+      ],
+      culture: 'Роль «посла данных» в отделах, сессии «Чужая голова» и «Датологические детективы».'
+    },
+    {
+      id: 3, num: 5, name: 'Фиксики', domain: 'oil',
+      project: 'Эффективность активов',
+      projectFull: 'Продуктовая структура и эффективность активов',
+      lead: 'Веденеев Ювеналий',
+      roster: [
+        { name: 'Веденеев Ювеналий', role: 'лидер команды' },
+        { name: 'Иванов Денис', role: '' },
+        { name: 'Терниевская Яна', role: '' },
+        { name: 'Шабаева Марина', role: '' }
+      ],
+      desc: 'Команда собрала дашборд по продуктовой структуре добычи и эффективности активов: структура по продуктам, план/факт по типам скважин и интенсивность отбора запасов. В данных нашлись системные аномалии.',
+      tags: ['Нефтегаз', 'DataVision', 'Качество данных'],
+      takeaway: 'Меньше вопросов «почему цифры разные?» — больше доверия к данным.',
+      results: [
+        'Дашборд в DataVision: продукты, план/факт, toe/reserves',
+        '5 инсайтов: региональный дисбаланс, дубли, «синтетичность»',
+        '3 инициативы по культуре данных'
+      ],
+      culture: 'Plain Language Data Map, «Data Fail of the Month» и кросс-функциональные спринты.'
+    },
+    {
+      id: 4, num: 7, name: 'Ползущие к мудрости', domain: 'oil',
+      project: 'Добыча нефти',
+      projectFull: 'Добыча нефти: объёмы, скважины, ремонты',
+      lead: 'Богомолова Елена',
+      roster: [
+        { name: 'Богомолова Елена', role: 'лидер, продажи B2C' },
+        { name: 'Толстиков Вадим', role: 'старший инженер, ИТ-инфраструктура' },
+        { name: 'Фотин Владимир', role: 'старший эксперт, клиентские включения' },
+        { name: 'Безверхая Светлана', role: 'менеджер проектов, развитие B2O' }
+      ],
+      desc: 'Команда анализировала добычу нефти: динамику объёмов, эффективность скважин и ремонты. Три дашборда и 2 767 найденных аномалий — с рекомендациями по плановым техническим обслуживаниям.',
+      tags: ['Нефтегаз', 'EDA', 'AI', 'Дашборды'],
+      takeaway: 'Нейросети ускоряют работу, но логику и выводы проверяем вручную.',
+      results: [
+        '3 дашборда: добыча, скважины, ремонты',
+        'Топ-10 скважин и 2 767 аномалий',
+        'Рекомендации по частоте плановых ТО'
+      ],
+      culture: 'Квартальный Data-Audit, редизайн отчётов, конкурсы по SQL/Python и библиотека промптов.'
+    },
+    {
+      id: 5, num: 3, name: 'БигДата Банда', domain: 'finance',
+      project: 'Клиенты банка',
+      projectFull: 'Клиенты, покупки и денежные потоки',
+      lead: 'не указан',
+      roster: [
+        { name: 'Ларин Дмитрий', role: 'менеджер, недвижимость' },
+        { name: 'Синяев Дмитрий', role: 'менеджер, корпоративный и гос. сегменты' },
+        { name: 'Лейфер Татьяна', role: 'руководитель, работа с холдингами' },
+        { name: 'Рачёв Геннадий', role: 'руководитель направления, дебиторская задолженность' },
+        { name: 'Кропотин Иван', role: 'эксперт, центр компетенций КСПД' },
+        { name: 'Шапкин Сергей', role: 'эксперт, техподдержка' }
+      ],
+      desc: 'Команда смотрела на банк глазами клиента: где живут зарплатные клиенты, что и у кого покупают, как двигаются деньги. Три дашборда помогают выбирать точки роста, настраивать кэшбэк и тарифы.',
+      tags: ['Банк', 'EDA', 'Клиентская аналитика'],
+      takeaway: 'Сложно не сделать дашборд, а понять, как правильно сформулировать задачу через данные.',
+      results: [
+        '3 дашборда: география, покупки, денежные потоки',
+        'EDA-карта локализации мошеннических операций',
+        'Матрица инициатив по культуре данных'
+      ],
+      culture: 'Обучение дата-грамотности, амбассадоры данных и независимый центр отчётности.'
+    },
+    {
+      id: 6, num: 6, name: 'Метрика Успеха', domain: 'finance',
+      project: 'Антифрод и отток',
+      projectFull: 'Качество сервиса, отток и антифрод',
+      lead: 'Абубакиров Азат',
+      roster: [
+        { name: 'Абубакиров Азат', role: 'тимлид, Оренбург' },
+        { name: 'Макогонова Екатерина', role: 'директор проектов, Краснодар' },
+        { name: 'Соколова Елена', role: 'старший эксперт, Екатеринбург' },
+        { name: 'Юнчик Владимир', role: 'ведущий инженер, Сургут' }
+      ],
+      desc: 'Команда работала с банковскими транзакциями: качество обслуживания, отток VIP-клиентов и фрод. Четыре дашборда и две ML-модели — от диагностики до приоритизации клиентов и проверок.',
+      tags: ['Банк', 'ML', 'Антифрод', 'Дашборды'],
+      takeaway: 'Дашборд показывает, что произошло. ML прогнозирует, что будет.',
+      results: [
+        '4 дашборда: отказы, отток, фрод, ML',
+        '99,5% фродов в TOP-10% операций, ROC-AUC 0,991',
+        '67 клиентов вместо массовой кампании'
+      ],
+      culture: 'Дорожная карта данных, база знаний, data-наставники и онлайн-игры для обучения.'
+    },
+    {
+      id: 7, num: 2, name: 'Сборная солянка', domain: 'finance',
+      project: 'Фрод и комиссии',
+      projectFull: 'Фрод, комиссии и клиентский опыт',
+      lead: 'не указан',
+      roster: [],
+      desc: 'Команда исследовала банковские транзакции: искала фрод, проверяла комиссии и клиентский путь. Собрала три дашборда и ML-модель, которая приоритизирует проверки по уровню риска.',
+      tags: ['Финтех', 'EDA', 'ML', 'Дашборды'],
+      takeaway: 'Начните с малого, но начните сегодня!',
+      results: [
+        '3 дашборда: фрод, финансовые операции, сервис',
+        '1 668 фродовых транзакций на 56 млн ₽',
+        'ML-модель предсказания фрода'
+      ],
+      culture: 'Data-хакатоны, Data Detox и регулярные Data Hours для обмена практиками.'
+    },
+    {
+      id: 8, num: 8, name: 'Команда 8', domain: 'telecom',
+      project: 'Эффективность рекламы',
+      projectFull: 'Эффективность рекламных кампаний',
+      lead: 'Ксения Якупова',
+      roster: [
+        { name: 'Ксения Якупова', role: 'Team Lead' },
+        { name: 'Ольга Новикова', role: 'Facilitator' },
+        { name: 'Валерия Цемежевская', role: 'Business Analyst' },
+        { name: 'Евгений Зубков', role: 'Data Engineer' },
+        { name: 'Ильдар Тавака', role: 'Storyteller' }
+      ],
+      desc: 'Команда разобрала рекламные кампании: расходы, viewability, конверсии и фрод. Интерактивный дашборд с фильтрами по периодам, устройствам и форматам показывает, где реклама работает, а где сгорает.',
+      tags: ['Реклама', 'BI', 'EDA', 'Культура данных'],
+      takeaway: 'Результат зависит не только от инструментов, но и от распределения ролей.',
+      results: [
+        'Интерактивный дашборд по рекламным кампаниям',
+        'Viewability 78,1% при цели 70%',
+        'Фрод-пик 03:00–05:00 — повод для алертов'
+      ],
+      culture: 'Личный пример: мини-демо для коллег, курсы по SQL/Python и переход от Excel к BI.'
+    },
+    {
+      id: 9, num: 9, name: 'Сила Востока', domain: 'telecom',
+      project: 'Платежи и услуги',
+      projectFull: 'Дата-пульс: платежи и топ услуг',
+      lead: 'не указан',
+      roster: [
+        { name: 'Демидова Анна', role: 'главный специалист, Владивосток' },
+        { name: 'Потокина Наталья', role: 'ведущий специалист, Томск' },
+        { name: 'Слепцова Наталия', role: 'менеджер по госструктурам, Магадан' },
+        { name: 'Лосева Кристина', role: 'руководитель проектов, Владивосток' },
+        { name: 'Вихарева Елена', role: 'сервис и обслуживание, РД Восток' }
+      ],
+      desc: 'Проект «Дата-пульс»: команда смотрела на телеком-платежи — способы оплаты, топ услуг и регулярность поступлений. Два дашборда показывают, где теряются деньги и какие услуги приносят выручку.',
+      tags: ['Телеком', 'Платежи', 'BI', 'Культура данных'],
+      takeaway: 'Одна команда — одна стихия!',
+      results: [
+        '2 дашборда: способы оплаты и топ-5 услуг',
+        'Карта — 40–45% платежей, терминал — 30–35%',
+        '3 инициативы по культуре данных'
+      ],
+      culture: 'Дашборды мотивации продавцов, «умный прейскурант» и практика Data Hypothesis.'
+    }
+  ];
+
+  /* Порядок команд на карте и в мобильном маршруте — по номерам команд */
+  teams.sort((a, b) => a.num - b.num);
+  teams.forEach((team, index) => { team.id = index + 1; });
+
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const pad = n => String(n).padStart(2, '0');
+  const pct = (v, total) => (v / total * 100).toFixed(3) + '%';
+
+  const nodesEl = $('#nodes');
+  const trailList = $('#trailList');
+  const panel = $('#panel');
+  const scrim = $('#scrim');
+  const panelScroll = $('.panel-scroll');
+  const domainBar = $('#domainBar');
+
+  let currentId = 1;
+  let lastTrigger = null;
+
+  function people(n) {
+    const mod10 = n % 10;
+    const mod100 = n % 100;
+    let word = 'человек';
+    if (mod10 === 1 && mod100 !== 11) word = 'человек';
+    else if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) word = 'человека';
+    return n + ' ' + word;
+  }
+
+  /* smooth path through the nine points (Catmull-Rom → Bezier) */
+  function buildPath(pts) {
+    return pts.reduce((d, p, i, arr) => {
+      if (i === 0) return 'M' + p.x + ',' + p.y;
+      const p0 = arr[i - 2] || arr[i - 1];
+      const p1 = arr[i - 1];
+      const p2 = p;
+      const p3 = arr[i + 1] || p;
+      const c1x = p1.x + (p2.x - p0.x) / 6;
+      const c1y = p1.y + (p2.y - p0.y) / 6;
+      const c2x = p2.x - (p3.x - p1.x) / 6;
+      const c2y = p2.y - (p3.y - p1.y) / 6;
+      return d + ' C' + c1x + ',' + c1y + ' ' + c2x + ',' + c2y + ' ' + p2.x + ',' + p2.y;
+    }, '');
+  }
+
+  const path = buildPath(points);
+  $('#trailBase').setAttribute('d', path);
+  $('#trailShadow').setAttribute('d', path);
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const trekker = $('#trekker');
+    if (trekker) trekker.remove();
+  }
+
+  /* map markers */
+  nodesEl.innerHTML = teams.map((t, i) => {
+    const p = points[i];
+    const domain = domains[t.domain];
+    return '' +
+      '<button class="node" type="button" data-id="' + t.id + '" data-domain="' + t.domain + '"' +
+        ' style="left:' + pct(p.x, W) + ';top:' + pct(p.y, H) + ';animation-delay:' + (0.12 + i * 0.07) + 's"' +
+        ' aria-haspopup="dialog" aria-label="Точка ' + pad(t.id) + '. Команда «' + t.name + '», проект «' + t.project + '». ' + domain.label + '">' +
+        '<span class="node-dot">' + pad(t.id) + '</span>' +
+        '<span class="node-label node-label--' + labelSides[i] + '">' +
+          '<span class="node-name"><span class="node-dot-mini" style="background:' + domain.color + '"></span>' + t.name + '</span>' +
+          '<span class="node-role">' + t.project + '</span>' +
+        '</span>' +
+      '</button>';
+  }).join('');
+
+  /* mobile trail list */
+  trailList.innerHTML = teams.map(t => {
+    const domain = domains[t.domain];
+    const count = t.roster.length ? ' · ' + people(t.roster.length) : '';
+    return '' +
+      '<li>' +
+        '<button class="trail-item" type="button" data-id="' + t.id + '" data-domain="' + t.domain + '"' +
+          ' aria-haspopup="dialog" aria-label="Команда «' + t.name + '», ' + domain.label + '">' +
+          '<span class="trail-node">' + pad(t.id) + '</span>' +
+          '<span class="trail-body">' +
+            '<span class="trail-name-row">' +
+              '<span class="trail-name">' + t.name + '</span>' +
+              '<span class="trail-chip">' + domain.label + '</span>' +
+            '</span>' +
+            '<span class="trail-role">' + t.project + count + '</span>' +
+          '</span>' +
+          '<svg class="trail-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true">' +
+            '<path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '</svg>' +
+        '</button>' +
+      '</li>';
+  }).join('');
+
+  /* summary */
+  const counts = { finance: 0, medicine: 0, oil: 0, telecom: 0 };
+  teams.forEach(t => { counts[t.domain] += 1; });
+
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const key = el.dataset.count;
+    el.textContent = key === 'all' ? teams.length : counts[key];
+  });
+
+  domainBar.innerHTML = domainOrder.map(key => {
+    return '<i style="flex:' + counts[key] + ';background:' + domains[key].color + '" title="' +
+      domains[key].label + ': ' + counts[key] + '"></i>';
+  }).join('');
+  domainBar.setAttribute('aria-label',
+    domainOrder.map(key => domains[key].label + ' — ' + counts[key]).join(', '));
+
+  $('#heroNote').innerHTML = domainOrder.map(key => {
+    return domains[key].label + ' — <strong>' + counts[key] + '</strong>';
+  }).join(', ') + '.';
+
+  /* filters */
+  const filterButtons = document.querySelectorAll('[data-filter]');
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+
+      filterButtons.forEach(b => {
+        const active = b === btn;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-pressed', String(active));
+      });
+
+      document.querySelectorAll('.node, .trail-item').forEach(el => {
+        el.classList.toggle('is-dim', filter !== 'all' && el.dataset.domain !== filter);
+      });
+    });
+  });
+
+  /* panel */
+  function fillPanel(t) {
+    const domain = domains[t.domain];
+    const count = t.roster.length;
+
+    panel.dataset.domain = t.domain;
+    $('#panelPoint').textContent = 'Команда №' + t.num + ' · точка ' + pad(t.id) + ' / 09';
+    $('#panelNum').textContent = pad(t.id);
+    $('#panelTitle').textContent = t.name;
+    $('#panelTitle').classList.toggle('is-long', t.name.length > 15);
+    $('#panelRole').textContent = t.projectFull;
+    $('#panelDomain').textContent = domain.label;
+    $('#panelDesc').textContent = t.desc;
+    $('#metaLead').textContent = t.lead;
+    $('#metaMembers').textContent = count ? people(count) : '—';
+    $('#metaDomain').textContent = domain.label;
+    $('#metaPoint').textContent = pad(t.id) + ' из 09';
+    $('#panelMotto').textContent = '«' + t.takeaway + '»';
+    $('#panelCounter').textContent = pad(t.id) + ' / 09';
+
+    $('#panelTags').innerHTML = t.tags.map(tag => '<span class="tag">' + tag + '</span>').join('');
+
+    const rosterBlock = $('#rosterBlock');
+    if (count) {
+      rosterBlock.hidden = false;
+      $('#panelRoster').innerHTML = t.roster.map(member => {
+        return '<li><span class="member-name">' + member.name + '</span>' +
+          (member.role ? '<span class="member-role">' + member.role + '</span>' : '') + '</li>';
+      }).join('');
+    } else {
+      rosterBlock.hidden = true;
+      $('#panelRoster').innerHTML = '';
+    }
+
+    $('#panelResult').innerHTML = t.results.map(item => '<li>' + item + '</li>').join('');
+    $('#panelCulture').textContent = t.culture;
+    panelScroll.scrollTop = 0;
+  }
+
+  function openPanel(id, trigger) {
+    const team = teams.find(t => t.id === id);
+    if (!team) return;
+
+    currentId = id;
+    lastTrigger = trigger || document.activeElement;
+    fillPanel(team);
+
+    scrim.classList.add('is-open');
+    panel.classList.add('is-open');
+    document.body.classList.add('is-locked');
+
+    requestAnimationFrame(() => $('#panelClose').focus({ preventScroll: true }));
+  }
+
+  function closePanel() {
+    scrim.classList.remove('is-open');
+    panel.classList.remove('is-open');
+    document.body.classList.remove('is-locked');
+
+    if (lastTrigger && typeof lastTrigger.focus === 'function') {
+      lastTrigger.focus({ preventScroll: true });
+    }
+  }
+
+  function stepPanel(direction) {
+    const index = teams.findIndex(t => t.id === currentId);
+    const nextIndex = (index + direction + teams.length) % teams.length;
+    currentId = teams[nextIndex].id;
+    fillPanel(teams[nextIndex]);
+    $('#panelClose').focus({ preventScroll: true });
+  }
+
+  $('#panelClose').addEventListener('click', closePanel);
+  scrim.addEventListener('click', closePanel);
+  $('#prevBtn').addEventListener('click', () => stepPanel(-1));
+  $('#nextBtn').addEventListener('click', () => stepPanel(1));
+
+  document.addEventListener('click', event => {
+    const node = event.target.closest('.node, .trail-item');
+    if (!node) return;
+    openPanel(Number(node.dataset.id), node);
+  });
+
+  document.addEventListener('keydown', event => {
+    if (!panel.classList.contains('is-open')) return;
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closePanel();
+      return;
+    }
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      stepPanel(1);
+      return;
+    }
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      stepPanel(-1);
+      return;
+    }
+    if (event.key !== 'Tab') return;
+
+    const focusables = panel.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    const list = Array.prototype.filter.call(focusables, el => !el.disabled && el.offsetParent !== null);
+    if (!list.length) return;
+
+    const first = list[0];
+    const last = list[list.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+})();
+</script>
+</body>
+</html>
